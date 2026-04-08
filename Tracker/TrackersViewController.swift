@@ -46,6 +46,28 @@ final class TrackersViewController: UIViewController {
         return searchBar
     }()
     
+    private lazy var leftBarButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: UIImage(resource: .addTracker),
+            style: .plain,
+            target: self,
+            action: #selector(didTapButton)
+        )
+        button.tintColor = .blackDay
+        return button
+    }()
+    
+    private lazy var rightBarButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            title: "Дата",
+            style: .plain,
+            target: self,
+            action: #selector(openDatePicker)
+        )
+        button.tintColor = .blackDay
+        return button
+    }()
+    
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,36 +99,20 @@ final class TrackersViewController: UIViewController {
             labelDizzy.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
             searchBar.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 7),
             searchBar.leadingAnchor.constraint(equalTo: label.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            searchBar.searchTextField.leadingAnchor.constraint(equalTo: label.leadingAnchor)
         ])
         
         //TODO: fix constraint for UI elements
     }
     
     private func configurationNavBar() {
-        let leftBarButton = UIBarButtonItem(
-            image: UIImage(resource: .addTracker),
-            style: .plain,
-            target: self,
-            action: #selector(didTapButton)
-        )
-        leftBarButton.tintColor = .blackDay
         self.navigationItem.leftBarButtonItem = leftBarButton
-        
-        let rightBarButton = UIBarButtonItem(
-            title: "Дата",
-            style: .plain,
-            target: self,
-            action: #selector(openDatePicker)
-        )
-        rightBarButton.tintColor = .blackDay
         self.navigationItem.rightBarButtonItem = rightBarButton
     }
     
     @objc private func didTapButton() {
         print("Tap plus button")
-        //        let statisticsVC = StatisticsViewController()
-        //        self.navigationController?.pushViewController(statisticsVC, animated: true)
     }
     
     @objc private func openDatePicker() {
