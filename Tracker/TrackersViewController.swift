@@ -68,6 +68,9 @@ final class TrackersViewController: UIViewController {
         return button
     }()
     
+    private var categories: [TrackerCategory]?
+    private var completedTrackers: [TrackerRecord]?
+    
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,12 +94,15 @@ final class TrackersViewController: UIViewController {
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1),
+            
             imageView.widthAnchor.constraint(equalToConstant: 80),
             imageView.heightAnchor.constraint(equalToConstant: 80),
             imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            
             labelDizzy.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             labelDizzy.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            
             searchBar.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 7),
             searchBar.leadingAnchor.constraint(equalTo: label.leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
