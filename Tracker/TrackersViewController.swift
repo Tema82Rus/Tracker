@@ -57,13 +57,10 @@ final class TrackersViewController: UIViewController {
         return button
     }()
     
-    private lazy var rightBarButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(
-            title: "Дата",
-            style: .plain,
-            target: self,
-            action: #selector(openDatePicker)
-        )
+    private lazy var datePicker: UIDatePicker = {
+        let button = UIDatePicker()
+        button.preferredDatePickerStyle = .compact
+        button.datePickerMode = .date
         button.tintColor = .blackDay
         return button
     }()
@@ -74,10 +71,8 @@ final class TrackersViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
         setupConstraint()
-        
         configurationNavBar()
     }
     
@@ -114,7 +109,8 @@ final class TrackersViewController: UIViewController {
     
     private func configurationNavBar() {
         self.navigationItem.leftBarButtonItem = leftBarButton
-        self.navigationItem.rightBarButtonItem = rightBarButton
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
     }
     
     @objc private func didTapButton() {
@@ -123,5 +119,13 @@ final class TrackersViewController: UIViewController {
     
     @objc private func openDatePicker() {
         print("Open view of date picker")
+    }
+    
+    @objc func datePickerValueChanged(_ sender: UIDatePicker) {
+        let selectedDate = sender.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let formattedDate = dateFormatter.string(from: selectedDate)
+        print("Выбранная дата: \(formattedDate)")
     }
 }
