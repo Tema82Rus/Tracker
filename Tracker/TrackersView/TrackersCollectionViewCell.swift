@@ -39,7 +39,16 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    // MARK: - Private Properties
+    private lazy var emoji: UIView = {
+        let view = UIView()
+        view.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
+        view.backgroundColor = .backgroundDay
+        view.layer.cornerRadius = view.bounds.width / 2
+        view.clipsToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private let cornerRadius: CGFloat = 16.0
     
     // MARK: - Static Properties
@@ -77,7 +86,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupColorForCell() {
-        topView.backgroundColor = .systemOrange
+        topView.backgroundColor = .systemGreen
     }
     
     private func setupColorForButton() {
@@ -97,6 +106,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(counter)
         contentView.addSubview(buttonCompleted)
+        contentView.addSubview(emoji)
     }
     
     private func setupConstraints() {
@@ -116,7 +126,12 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             buttonCompleted.widthAnchor.constraint(equalToConstant: 34),
             buttonCompleted.heightAnchor.constraint(equalToConstant: 34),
             buttonCompleted.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-            buttonCompleted.centerYAnchor.constraint(equalTo: counter.centerYAnchor)
+            buttonCompleted.centerYAnchor.constraint(equalTo: counter.centerYAnchor),
+            
+            emoji.widthAnchor.constraint(equalToConstant: 24),
+            emoji.heightAnchor.constraint(equalToConstant: 24),
+            emoji.topAnchor.constraint(equalTo: topView.topAnchor, constant: 12),
+            emoji.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 12)
         ])
     }
     
