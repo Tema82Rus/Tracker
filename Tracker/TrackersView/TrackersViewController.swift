@@ -69,7 +69,7 @@ final class TrackersViewController: UIViewController {
     private lazy var trackersCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        //collectionView.backgroundColor = .systemGray2
+        collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(TrackersCollectionViewCell.self,
                                 forCellWithReuseIdentifier: TrackersCollectionViewCell.reuseIdentifier
@@ -87,18 +87,13 @@ final class TrackersViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        setupViews()
         setupConstraint()
         configurationNavBar()
         setupCollectionView()
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        trackersCollectionView.frame = view.bounds
-//    }
     // MARK: - Private Methods
-    private func setupView() {
+    private func setupViews() {
         view.addSubview(label)
         view.addSubview(imageView)
         view.addSubview(labelDizzy)
@@ -125,7 +120,7 @@ final class TrackersViewController: UIViewController {
         print("Tap plus button")
     }
     
-    @objc func datePickerValueChanged(_ sender: UIDatePicker) {
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
@@ -151,7 +146,7 @@ final class TrackersViewController: UIViewController {
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             searchBar.searchTextField.leadingAnchor.constraint(equalTo: label.leadingAnchor),
             
-            trackersCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 34),
+            trackersCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             trackersCollectionView.leadingAnchor.constraint(equalTo: label.leadingAnchor),
             trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
@@ -164,7 +159,7 @@ final class TrackersViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -206,7 +201,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width / 2 - 9, height: 90)
+        return CGSize(width: collectionView.bounds.width / 2 - 9, height: 148)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

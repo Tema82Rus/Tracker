@@ -13,9 +13,30 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let title = UILabel()
         title.font = .systemFont(ofSize: 12, weight: .medium)
         title.textColor = .ypWhite
-        title.textAlignment = .center
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
+    }()
+    
+    lazy var counter: UILabel = {
+        let title = UILabel()
+        title.font = .systemFont(ofSize: 12, weight: .medium)
+        title.textColor = .blackDay
+        title.translatesAutoresizingMaskIntoConstraints = false
+        return title
+    }()
+    
+    // MARK: - Private Properties
+    private lazy var buttonCompleted: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(resource: .plus), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private lazy var topView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     // MARK: - Private Properties
@@ -27,8 +48,12 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupTitle()
+        setupViews()
+        setupConstraints()
         setupColorForCell()
+        setupColorForButton()
+        setupButtonCompleted()
+        changeCounter()
     }
     
     required init?(coder: NSCoder) {
@@ -39,24 +64,65 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         setupCornerRadius()
+        buttonCompleted.layer.cornerRadius = buttonCompleted.bounds.width / 2
+        buttonCompleted.clipsToBounds = true
     }
     
     // MARK: - Private Methods
-    private func setupTitle() {
-        contentView.addSubview(titleLabel)
-        NSLayoutConstraint.activate([
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12)
-        ])
+    private func setupButtonCompleted() {
+        buttonCompleted.addTarget(self,
+                                  action: #selector(buttonCompletedTapped),
+                                  for: .touchUpInside
+        )
     }
     
     private func setupColorForCell() {
-        contentView.backgroundColor = .systemGreen
+        topView.backgroundColor = .systemOrange
+    }
+    
+    private func setupColorForButton() {
+        buttonCompleted.tintColor = topView.backgroundColor
+    }
+    
+    private func changeCounter() {
+        counter.text = "0 дней"
+    }
+    
+    @objc private func buttonCompletedTapped() {
+        print("Трекер выполнен")
+    }
+    
+    private func setupViews() {
+        contentView.addSubview(topView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(counter)
+        contentView.addSubview(buttonCompleted)
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            topView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            topView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            topView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            topView.heightAnchor.constraint(equalToConstant: 90),
+            
+            titleLabel.bottomAnchor.constraint(equalTo: topView.bottomAnchor, constant: -12),
+            titleLabel.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 12),
+            
+            counter.topAnchor.constraint(equalTo: topView.bottomAnchor, constant: 16),
+            counter.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
+            counter.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            
+            buttonCompleted.widthAnchor.constraint(equalToConstant: 34),
+            buttonCompleted.heightAnchor.constraint(equalToConstant: 34),
+            buttonCompleted.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            buttonCompleted.centerYAnchor.constraint(equalTo: counter.centerYAnchor)
+        ])
     }
     
     private func setupCornerRadius() {
-        print("Content view frame: \(contentView.frame)") // TODO: размер 176 вместо 167 исправить
-        contentView.layer.cornerRadius = cornerRadius
-        contentView.layer.masksToBounds = true
+        print("Content view frame: \(contentView.frame)") // TODO: длина ячейки 176 вместо 167
+        topView.layer.cornerRadius = cornerRadius
+        topView.clipsToBounds = true
     }
 }
