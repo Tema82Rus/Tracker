@@ -5,12 +5,12 @@
 //  Created by Artem Yaroshenko on 14.04.2026.
 //
 
-import Foundation
+import UIKit
 
 struct Tracker {
     let id: UUID
     let title: String
-    let color: String
+    let color: UIColor
     let emoji: String
-    let timeTable: [TimeTable]
+    let timeTable: Set<WeekDay>
 }

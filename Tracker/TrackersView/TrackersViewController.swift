@@ -59,15 +59,21 @@ final class TrackersViewController: UIViewController {
     }()
     
     private lazy var datePicker: UIDatePicker = {
-        let button = UIDatePicker()
-        button.preferredDatePickerStyle = .compact
-        button.datePickerMode = .date
-        button.tintColor = .blackDay
-        return button
+        let datePicker = UIDatePicker()
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.datePickerMode = .date
+        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.calendar.firstWeekday = 2
+        datePicker.date = currentDate
+        datePicker.tintColor = .blackDay
+        return datePicker
     }()
     
     private lazy var trackersCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 167, height: 148)
+        layout.minimumInteritemSpacing = 9
+        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -82,28 +88,38 @@ final class TrackersViewController: UIViewController {
     }()
     
     private var categories: [TrackerCategory]?
-    private var completedTrackers: [TrackerRecord]?
-    
+    private var visibleCategories: [TrackerCategory]?
+    private var completedTrackers: Set<TrackerRecord>?
+    private var currentDate = Date()
+    private var selectedDate: Date?
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        setupConstraint()
         configurationNavBar()
-        setupCollectionView()
-    }
-    // MARK: - Private Methods
-    private func setupViews() {
-        view.addSubview(label)
-        view.addSubview(imageView)
-        view.addSubview(labelDizzy)
-        view.addSubview(searchBar)
-        view.addSubview(trackersCollectionView)
-    }
-
-    private func setupCollectionView() {
         trackersCollectionView.dataSource = self
         trackersCollectionView.delegate = self
+        setupTestData()
+    }
+    
+    // MARK: - Private Methods
+    private func setupTestData() {
+        let testTrackers = [
+            Tracker(id: UUID(),
+                    title: "Зарядка утром",
+                    color: .systemGreen,
+                    emoji: "🏋️‍♀️",
+                    timeTable: [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
+                   ),
+            Tracker(id: UUID(),
+                    title: "Поливать цветы",
+                    color: .systemPink,
+                    emoji: "🌸",
+                    timeTable: [.monday, .friday]
+                   )
+        ]
+        categories = [TrackerCategory(title: "Важные привычки", trackers: testTrackers)]
+        visibleCategories = categories
     }
     
     private func configurationNavBar() {
@@ -122,13 +138,22 @@ final class TrackersViewController: UIViewController {
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
+        self.selectedDate = selectedDate
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
         let formattedDate = dateFormatter.string(from: selectedDate)
         print("Выбранная дата: \(formattedDate)")
+        
     }
     
-    private func setupConstraint() {
+    private func setupViews() {
+        view.addSubview(label)
+        view.addSubview(imageView)
+        view.addSubview(labelDizzy)
+        view.addSubview(searchBar)
+        view.addSubview(trackersCollectionView)
+        
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1),
@@ -151,8 +176,6 @@ final class TrackersViewController: UIViewController {
             trackersCollectionView.leadingAnchor.constraint(equalTo: label.leadingAnchor),
             trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
-        
-        //TODO: fix constraint for UI elements
     }
 }
 
@@ -166,7 +189,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackersCollectionViewCell.reuseIdentifier,
                                                             for: indexPath) as? TrackersCollectionViewCell else { return UICollectionViewCell()}
         cell.backgroundColor = .clear
-        cell.titleLabel.text = "Поливать растения"
+        cell.setupCell(title: "Поливать растения")
         return cell
     }
     
@@ -184,7 +207,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? SupplementaryView else {
             fatalError("Failed to dequeue supplementary view of kind: \(kind) with identifier: \(id)")
         }
-        view.titleLabel.text = "Домашний уют"
+        view.setupHeader(title: "Домашний уют")
         return view
     }
 }
@@ -194,18 +217,9 @@ extension TrackersViewController: UICollectionViewDataSource {
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let header = SupplementaryView(frame: .zero)
-        header.titleLabel.text = "Домашний уют"
+        header.setupHeader(title: "Домашний уют")
         return header.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
                                                      height: UIView.layoutFittingCompressedSize.height)
         )
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width / 2 - 9, height: 148)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 9
-    }
-    
 }

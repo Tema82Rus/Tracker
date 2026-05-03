@@ -8,8 +8,26 @@
 import UIKit
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
-    // MARK: - Public Properties
-    lazy var titleLabel: UILabel = {
+    // MARK: - Private Properties
+    private lazy var emojiLabelBackgroundView: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = UIColor.backgroundDay
+        label.layer.cornerRadius = 12
+        label.clipsToBounds = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var emojiLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .blackDay
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var titleLabel: UILabel = {
         let title = UILabel()
         title.font = .systemFont(ofSize: 12, weight: .medium)
         title.textColor = .ypWhite
@@ -17,7 +35,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         return title
     }()
     
-    lazy var counter: UILabel = {
+    private lazy var counterLabel: UILabel = {
         let title = UILabel()
         title.font = .systemFont(ofSize: 12, weight: .medium)
         title.textColor = .blackDay
@@ -25,119 +43,100 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         return title
     }()
     
-    // MARK: - Private Properties
-    private lazy var buttonCompleted: UIButton = {
+    private lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(resource: .plus), for: .normal)
+        button.addTarget(self,
+                         action: #selector(buttonCompletedTapped),
+                         for: .touchUpInside
+        )
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    private lazy var topView: UIView = {
+    private lazy var cellColorView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private lazy var emoji: UIView = {
-        let view = UIView()
-        view.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-        view.backgroundColor = .backgroundDay
-        view.layer.cornerRadius = view.bounds.width / 2
+        view.layer.cornerRadius = 16
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private let cornerRadius: CGFloat = 16.0
-    
     // MARK: - Static Properties
     static let reuseIdentifier: String = "TrackersCollectionViewCell"
     
-    // MARK: - Initializers
+    // MARK: - Initialisers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        setupConstraints()
-        setupColorForCell()
-        setupColorForButton()
-        setupButtonCompleted()
-        changeCounter()
+        setupCell(color: .systemGreen)
+        setupCell(count: 0)
+        setupCell(emoji: "😪")
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Override Methods
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setupCornerRadius()
-        buttonCompleted.layer.cornerRadius = buttonCompleted.bounds.width / 2
-        buttonCompleted.clipsToBounds = true
+    // MARK: - Public Methods
+    func setupCell(title: String) {
+        titleLabel.text = title
+    }
+    
+    func setupCell(count: Int) {
+        counterLabel.text = "\(count) дней"
+    }
+    
+    func setupCell(color: UIColor) {
+        cellColorView.backgroundColor = color
+        setupCell(colorButton: color)
+    }
+    
+    func setupCell(colorButton: UIColor) {
+        completeButton.tintColor = colorButton
+    }
+    
+    func setupCell(emoji: String) {
+        emojiLabel.text = emoji
     }
     
     // MARK: - Private Methods
-    private func setupButtonCompleted() {
-        buttonCompleted.addTarget(self,
-                                  action: #selector(buttonCompletedTapped),
-                                  for: .touchUpInside
-        )
-    }
-    
-    private func setupColorForCell() {
-        topView.backgroundColor = .systemGreen
-    }
-    
-    private func setupColorForButton() {
-        buttonCompleted.tintColor = topView.backgroundColor
-    }
-    
-    private func changeCounter() {
-        counter.text = "0 дней"
-    }
-    
     @objc private func buttonCompletedTapped() {
         print("Трекер выполнен")
     }
     
     private func setupViews() {
-        contentView.addSubview(topView)
+        contentView.addSubview(cellColorView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(counter)
-        contentView.addSubview(buttonCompleted)
-        contentView.addSubview(emoji)
-    }
-    
-    private func setupConstraints() {
+        contentView.addSubview(counterLabel)
+        contentView.addSubview(completeButton)
+        emojiLabelBackgroundView.addSubview(emojiLabel)
+        contentView.addSubview(emojiLabelBackgroundView)
+        
         NSLayoutConstraint.activate([
-            topView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            topView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            topView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            topView.heightAnchor.constraint(equalToConstant: 90),
+            cellColorView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cellColorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            cellColorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            cellColorView.heightAnchor.constraint(equalToConstant: 90),
             
-            titleLabel.bottomAnchor.constraint(equalTo: topView.bottomAnchor, constant: -12),
-            titleLabel.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 12),
+            titleLabel.bottomAnchor.constraint(equalTo: cellColorView.bottomAnchor, constant: -12),
+            titleLabel.leadingAnchor.constraint(equalTo: cellColorView.leadingAnchor, constant: 12),
             
-            counter.topAnchor.constraint(equalTo: topView.bottomAnchor, constant: 16),
-            counter.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
-            counter.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            counterLabel.topAnchor.constraint(equalTo: cellColorView.bottomAnchor, constant: 16),
+            counterLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
+            counterLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             
-            buttonCompleted.widthAnchor.constraint(equalToConstant: 34),
-            buttonCompleted.heightAnchor.constraint(equalToConstant: 34),
-            buttonCompleted.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-            buttonCompleted.centerYAnchor.constraint(equalTo: counter.centerYAnchor),
+            completeButton.widthAnchor.constraint(equalToConstant: 34),
+            completeButton.heightAnchor.constraint(equalToConstant: 34),
+            completeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            completeButton.centerYAnchor.constraint(equalTo: counterLabel.centerYAnchor),
             
-            emoji.widthAnchor.constraint(equalToConstant: 24),
-            emoji.heightAnchor.constraint(equalToConstant: 24),
-            emoji.topAnchor.constraint(equalTo: topView.topAnchor, constant: 12),
-            emoji.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 12)
+            emojiLabelBackgroundView.widthAnchor.constraint(equalToConstant: 24),
+            emojiLabelBackgroundView.heightAnchor.constraint(equalToConstant: 24),
+            emojiLabelBackgroundView.topAnchor.constraint(equalTo: cellColorView.topAnchor, constant: 12),
+            emojiLabelBackgroundView.leadingAnchor.constraint(equalTo: cellColorView.leadingAnchor, constant: 12),
+            emojiLabel.centerXAnchor.constraint(equalTo: emojiLabelBackgroundView.centerXAnchor),
+            emojiLabel.centerYAnchor.constraint(equalTo: emojiLabelBackgroundView.centerYAnchor),
         ])
-    }
-    
-    private func setupCornerRadius() {
-        print("Content view frame: \(contentView.frame)") // TODO: длина ячейки 176 вместо 167
-        topView.layer.cornerRadius = cornerRadius
-        topView.clipsToBounds = true
     }
 }

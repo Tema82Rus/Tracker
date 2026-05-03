@@ -9,7 +9,7 @@ import UIKit
 
 class SupplementaryView: UICollectionReusableView {
     // MARK: - Public Properties
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 19, weight: .bold)
         label.textColor = .blackDay
@@ -32,7 +32,11 @@ class SupplementaryView: UICollectionReusableView {
     }
     
     // MARK: - Public Methods
-    func setupTitle() {
+    func setupHeader(title: String) {
+        titleLabel.text = title
+    }
+    // MARK: - Private Methods
+    private func setupTitle() {
         addSubview(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
