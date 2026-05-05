@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol TrackerCellDelegate: AnyObject {
+    func didAddCompletion(for tracker: Tracker, on date: Date)
+}
+
 final class TrackersCollectionViewCell: UICollectionViewCell {
+    // MARK: Public Properties
+    weak var delegate: TrackerCellDelegate?
+    
     // MARK: - Private Properties
     private lazy var emojiLabelBackgroundView: UILabel = {
         let label = UILabel()
@@ -46,6 +53,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(resource: .plus), for: .normal)
+        button.setImage(UIImage(resource: .done), for: .selected)
         button.addTarget(self,
                          action: #selector(buttonCompletedTapped),
                          for: .touchUpInside
@@ -62,6 +70,10 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    private var tracker: Tracker?
+    private var isCompleted = false
+    private var completionCount = 0
+    private var selectedDate: Date?
     // MARK: - Static Properties
     static let reuseIdentifier: String = "TrackersCollectionViewCell"
     
@@ -100,9 +112,52 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         emojiLabel.text = emoji
     }
     
+    func setupCell(tracker: Tracker) {
+        setupCell(title: tracker.title)
+        setupCell(color: tracker.color)
+        setupCell(emoji: tracker.emoji)
+    }
+    
+    func setupCell(completed: Bool) {
+        isCompleted = completed
+    }
+    
+    func setupTracker(tracker: Tracker) {
+        self.tracker = tracker
+        if isCompleted {
+            completeButton.isSelected = true
+            setupCell(count: completionCount)
+        }
+    }
+    
+    func setupSelectedDate(date: Date) {
+        selectedDate = date
+    }
+    
     // MARK: - Private Methods
     @objc private func buttonCompletedTapped() {
-        print("Трекер выполнен")
+        guard let tracker = tracker, let selectedDate = selectedDate else { return }
+        
+        if !isFutureDate(selectedDate) {
+            isCompleted = !isCompleted
+            completeButton.isSelected = isCompleted
+            
+            if isCompleted {
+                completionCount += 1
+            } else {
+                completionCount -= 1
+            }
+            
+            setupCell(count: completionCount)
+            
+            delegate?.didAddCompletion(for: tracker, on: selectedDate)
+        } else {
+            print("Нельзя отметить карточку для будущей даты")
+        }
+    }
+    
+    private func isFutureDate(_ date: Date) -> Bool {
+        return date > Date()
     }
     
     private func setupViews() {
