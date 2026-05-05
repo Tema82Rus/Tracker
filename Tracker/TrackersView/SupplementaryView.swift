@@ -8,7 +8,7 @@
 import UIKit
 
 class SupplementaryView: UICollectionReusableView {
-    // MARK: - Public Properties
+    // MARK: - Private Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 19, weight: .bold)
@@ -18,13 +18,12 @@ class SupplementaryView: UICollectionReusableView {
     }()
     
     // MARK: - Static Properties
-    static let reuseIndentifierHeader: String = "header"
-    static let reuseIndentifierFooter: String = "footer"
+    static let reuseHeaderIdentifier: String = "header"
     
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupTitle()
+        setupView()
     }
     
     required init?(coder: NSCoder) {
@@ -36,7 +35,7 @@ class SupplementaryView: UICollectionReusableView {
         titleLabel.text = title
     }
     // MARK: - Private Methods
-    private func setupTitle() {
+    private func setupView() {
         addSubview(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),

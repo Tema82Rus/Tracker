@@ -88,7 +88,7 @@ final class TrackersViewController: UIViewController {
         )
         collectionView.register(SupplementaryView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: SupplementaryView.reuseIndentifierHeader
+                                withReuseIdentifier: SupplementaryView.reuseHeaderIdentifier
         )
         return collectionView
     }()
@@ -163,7 +163,7 @@ final class TrackersViewController: UIViewController {
         print("Выбранная дата 📅: \(formattedDate)")
         
         updateTrackersForDate(date: selectedDate)
-        trackersCollectionView.reloadData()
+        //trackersCollectionView.reloadData()
     }
     
     private func updateTrackersForDate(date: Date) {
@@ -329,9 +329,9 @@ extension TrackersViewController: UICollectionViewDataSource {
         var id: String
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            id = SupplementaryView.reuseIndentifierHeader
+            id = SupplementaryView.reuseHeaderIdentifier
         case UICollectionView.elementKindSectionFooter:
-            id = SupplementaryView.reuseIndentifierFooter
+            id = "footer"
         default:
             fatalError("Unsupported supplementary view kind: \(kind)")
         }
