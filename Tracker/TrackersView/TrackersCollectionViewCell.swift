@@ -9,6 +9,7 @@ import UIKit
 
 protocol TrackerCellDelegate: AnyObject {
     func didAddCompletion(for tracker: Tracker, on date: Date)
+    func removeAddCompletion(for tracker: Tracker, on date: Date)
 }
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
@@ -51,7 +52,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var completeButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton(type: .custom)
         button.setImage(UIImage(resource: .plus), for: .normal)
         button.setImage(UIImage(resource: .done), for: .selected)
         button.addTarget(self,
@@ -144,13 +145,15 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             
             if isCompleted {
                 completionCount += 1
+                delegate?.didAddCompletion(for: tracker, on: selectedDate)
             } else {
                 completionCount -= 1
+                delegate?.removeAddCompletion(for: tracker, on: selectedDate)
             }
             
             setupCell(count: completionCount)
             
-            delegate?.didAddCompletion(for: tracker, on: selectedDate)
+            
         } else {
             print("Нельзя отметить карточку для будущей даты")
         }

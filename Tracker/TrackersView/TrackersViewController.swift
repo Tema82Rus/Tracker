@@ -101,11 +101,12 @@ final class TrackersViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTestData()
         setupViews()
         configurationNavBar()
         trackersCollectionView.dataSource = self
         trackersCollectionView.delegate = self
-        setupTestData()
+        
         updateEmptyState()
     }
     
@@ -139,6 +140,7 @@ final class TrackersViewController: UIViewController {
             categories = newCategories
         }
         visibleCategories = categories
+        updateTrackersForDate(date: currentDate)
     }
     
     private func configurationNavBar() {
@@ -362,5 +364,15 @@ extension TrackersViewController: TrackerCellDelegate {
         completedTrackers.insert(completedTracker)
         print("Трекер \(tracker.title) сохранен")
         print("Список выполненных трекеров: \(completedTrackers)")
+    }
+    func removeAddCompletion(for tracker: Tracker, on date: Date) {
+        let completedTracker = TrackerRecord(id: tracker.id, date: date)
+        completedTrackers.remove(completedTracker)
+        print("Трекер \(tracker.title) удален")
+        print("Список выполненных трекеров ниже:")
+        for tracker in completedTrackers {
+            print("Id: \(tracker.id) date: \(tracker.date)")
+        }
+        
     }
 }
