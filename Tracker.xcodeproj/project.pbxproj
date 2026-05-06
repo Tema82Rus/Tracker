@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		BCAF64332F7D6590005FEC32 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCAF64332F7D6590005FEC32 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Tracker.app; path = "/Users/tema82rus/Tracker/build/Debug-iphoneos/Tracker.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -46,16 +46,7 @@
 			isa = PBXGroup;
 			children = (
 				BCAF64352F7D6590005FEC32 /* Tracker */,
-				BCAF64342F7D6590005FEC32 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		BCAF64342F7D6590005FEC32 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				BCAF64332F7D6590005FEC32 /* Tracker.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -108,7 +99,7 @@
 			mainGroup = BCAF642A2F7D6590005FEC32;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = BCAF64342F7D6590005FEC32 /* Products */;
+			productRefGroup = BCAF642A2F7D6590005FEC32;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

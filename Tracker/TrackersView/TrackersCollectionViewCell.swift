@@ -82,9 +82,9 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        setupCell(color: .systemGreen)
+        //setupCell(color: .systemGreen)
         setupCell(count: 0)
-        setupCell(emoji: "😪")
+        //setupCell(emoji: "😪")
     }
     
     required init?(coder: NSCoder) {
