@@ -88,7 +88,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTestData()
+        //setupTestData()
         setupNavBar()
         setupViews()
         
@@ -389,11 +389,12 @@ extension TrackersViewController: UICollectionViewDataSource {
             fatalError("Unsupported supplementary view kind: \(kind)")
         }
         
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? SupplementaryView else {
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? SupplementaryView else {
             fatalError("Failed to dequeue supplementary view of kind: \(kind) with identifier: \(id)")
         }
-        view.setupHeader(title: "Домашний уют")
-        return view
+        let category = getVisibleCategories()[indexPath.section]
+        header.setupHeader(title: category.title)
+        return header
     }
 }
 
@@ -419,6 +420,7 @@ extension TrackersViewController: TrackerCellDelegate {
             completedTrackers.remove(trackerRecord)
             print("Трекер \(tracker.title) удален")
         }
+        trackersCollectionView.reloadData()
     }
 }
 

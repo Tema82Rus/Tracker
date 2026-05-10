@@ -51,13 +51,16 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var completeButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(resource: .plus), for: .normal)
-        button.setImage(UIImage(resource: .done), for: .selected)
+        let button = UIButton()
+        button.layer.cornerRadius = 17
+        button.clipsToBounds = true
+        button.layer.masksToBounds = true
         button.addTarget(self,
                          action: #selector(buttonCompletedTapped),
                          for: .touchUpInside
         )
+        button.setImage(UIImage(resource: .plus), for: .normal)
+        button.setImage(UIImage(resource: .done), for: .selected)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -118,8 +121,8 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let cellColor = tracker.color
         cellColorView.backgroundColor = cellColor
         
-        completeButton.backgroundColor = cellColor
-        completeButton.tintColor = .white
+        completeButton.backgroundColor = .clear
+        completeButton.tintColor = cellColor
         
         let word = declinationOfDays(numbersOfCompletedTrackers)
         counterLabel.text = "\(numbersOfCompletedTrackers) \(word)"
@@ -159,7 +162,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         
         isCompleted.toggle()
         completeButton.isSelected = isCompleted
-        //completeButton.backgroundColor = tracker.color
         delegate?.addOrRemoveCompletionTracker(for: tracker, isCompletedInCell: isCompleted)
     }
     
