@@ -8,15 +8,19 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
+    // MARK: - Private Properties
+    private var topDivider: UIView?
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupTabBar()
     }
     
     // MARK: - Private Methods
     private func setupTabBar() {
+        addTopDividerToBar()
+        
         let trackersVC = TrackersViewController()
         let statisticsVC = StatisticsViewController()
         
@@ -26,6 +30,21 @@ final class TabBarController: UITabBarController {
         let trackersNavController = UINavigationController(rootViewController: trackersVC)
         let statisticsNavController = UINavigationController(rootViewController: statisticsVC)
         viewControllers = [trackersNavController, statisticsNavController]
+    }
+    
+    private func addTopDividerToBar() {
+        let divider = UIView()
+        divider.backgroundColor = .appGray
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        
+        tabBar.addSubview(divider)
+        
+        NSLayoutConstraint.activate([
+            divider.topAnchor.constraint(equalTo: tabBar.topAnchor),
+            divider.leadingAnchor.constraint(equalTo: tabBar.leadingAnchor),
+            divider.trailingAnchor.constraint(equalTo: tabBar.trailingAnchor),
+            divider.heightAnchor.constraint(equalToConstant: 0.5)
+        ])
     }
    
 }

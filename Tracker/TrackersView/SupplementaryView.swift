@@ -23,7 +23,7 @@ class SupplementaryView: UICollectionReusableView {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
+        setupViews()
     }
     
     required init?(coder: NSCoder) {
@@ -35,7 +35,7 @@ class SupplementaryView: UICollectionReusableView {
         titleLabel.text = title
     }
     // MARK: - Private Methods
-    private func setupView() {
+    private func setupViews() {
         addSubview(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),

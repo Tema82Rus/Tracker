@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+//СДелать тупой ячейку то есть неперегружать ее разными зависимостями
 protocol TrackerCellDelegate: AnyObject {
     func didAddCompletion(for tracker: Tracker, on date: Date)
     func removeAddCompletion(for tracker: Tracker, on date: Date)
@@ -75,6 +75,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private var isCompleted = false
     private var completionCount = 0
     private var selectedDate: Date?
+    private var currentDate = Date()
     // MARK: - Static Properties
     static let reuseIdentifier: String = "TrackersCollectionViewCell"
     
@@ -82,9 +83,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        //setupCell(color: .systemGreen)
         setupCell(count: 0)
-        //setupCell(emoji: "😪")
     }
     
     required init?(coder: NSCoder) {
@@ -92,43 +91,21 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Public Methods
-    func setupCell(title: String) {
-        titleLabel.text = title
+    func setupCell(tracker: Tracker) {
+        titleLabel.text = tracker.title
+        cellColorView.backgroundColor = tracker.color
+        completeButton.tintColor = tracker.color
+        emojiLabel.text = tracker.emoji
+        
+        self.tracker = tracker
+        if isCompleted {
+            completeButton.isSelected = true
+            counterLabel.text = "\(completionCount) дней"
+        }
     }
     
     func setupCell(count: Int) {
         counterLabel.text = "\(count) дней"
-    }
-    
-    func setupCell(color: UIColor) {
-        cellColorView.backgroundColor = color
-        setupCell(colorButton: color)
-    }
-    
-    func setupCell(colorButton: UIColor) {
-        completeButton.tintColor = colorButton
-    }
-    
-    func setupCell(emoji: String) {
-        emojiLabel.text = emoji
-    }
-    
-    func setupCell(tracker: Tracker) {
-        setupCell(title: tracker.title)
-        setupCell(color: tracker.color)
-        setupCell(emoji: tracker.emoji)
-    }
-    
-    func setupCell(completed: Bool) {
-        isCompleted = completed
-    }
-    
-    func setupTracker(tracker: Tracker) {
-        self.tracker = tracker
-        if isCompleted {
-            completeButton.isSelected = true
-            setupCell(count: completionCount)
-        }
     }
     
     func setupSelectedDate(date: Date) {
@@ -139,7 +116,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     @objc private func buttonCompletedTapped() {
         guard let tracker = tracker, let selectedDate = selectedDate else { return }
         
-        if !isFutureDate(selectedDate) {
+        if !(selectedDate > currentDate) {
             isCompleted = !isCompleted
             completeButton.isSelected = isCompleted
             
@@ -157,10 +134,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         } else {
             print("Нельзя отметить карточку для будущей даты")
         }
-    }
-    
-    private func isFutureDate(_ date: Date) -> Bool {
-        return date > Date()
     }
     
     private func setupViews() {
