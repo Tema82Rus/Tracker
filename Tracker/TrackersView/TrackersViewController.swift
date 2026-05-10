@@ -173,11 +173,11 @@ final class TrackersViewController: UIViewController {
         refreshUIForSelectedDate()
     }
     
-    private func getCategoriesForDate(date: Date) -> [TrackerCategory] {
+    private func getVisibleCategories() -> [TrackerCategory] {
         guard !categories.isEmpty else { return [] }
         
         let calendar = Calendar.current
-        guard let weekday = calendar.dateComponents([.weekday], from: date).weekday else { return [] }
+        guard let weekday = calendar.dateComponents([.weekday], from: currentDate).weekday else { return [] }
         
         var filteredCategories: [TrackerCategory] = []
         
@@ -194,8 +194,8 @@ final class TrackersViewController: UIViewController {
         return filteredCategories
     }
     
-    private func updateVisibleCategories(for date: Date) {
-        visibleCategories = getCategoriesForDate(date: date)
+    private func updateVisibleCategories() {
+        visibleCategories = getVisibleCategories()
     }
     
     private func updateUI() {
@@ -205,7 +205,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func refreshUIForSelectedDate() {
-        updateVisibleCategories(for: currentDate)
+        updateVisibleCategories()
         updateUI()
     }
     
