@@ -21,8 +21,6 @@ class NewHabitViewController: UIViewController, UITextFieldDelegate {
         label.text = "Новая привычка"
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .blackDay
-        label.textAlignment = .center
-        label.sizeToFit()
         return label
     }()
     
@@ -61,6 +59,12 @@ class NewHabitViewController: UIViewController, UITextFieldDelegate {
             action: #selector(saveButtonTappedKeyboard)
         )
         toolbar.items = [cancel, flexibleSpace, save]
+        toolbar.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            toolbar.heightAnchor.constraint(equalToConstant: 75)
+        ])
+        
         return toolbar
     }()
     
