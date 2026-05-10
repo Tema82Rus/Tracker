@@ -85,7 +85,6 @@ final class TrackersViewController: UIViewController {
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: Set<TrackerRecord> = []
     private var currentDate = Date()
-    private var selectedDate: Date?
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -141,7 +140,7 @@ final class TrackersViewController: UIViewController {
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
-        self.selectedDate = selectedDate
+        currentDate = selectedDate
         
         let formattedDate = dateFormatter.string(from: selectedDate)
         print("Выбранная дата 📅: \(formattedDate)")
@@ -206,8 +205,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func refreshUIForSelectedDate() {
-        let dateToCheck = selectedDate ?? currentDate
-        updateVisibleCategories(for: dateToCheck)
+        updateVisibleCategories(for: currentDate)
         updateUI()
     }
     
@@ -337,7 +335,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell.delegate = self
         //cell.setup передать все данные для ячейки
         cell.setupCell(tracker: tracker)
-        cell.setupSelectedDate(date: selectedDate ?? currentDate)
+        cell.setupSelectedDate(date: currentDate)
         cell.backgroundColor = .clear
         return cell
         //3 шага: создание, передача данных и вернул ячейку
