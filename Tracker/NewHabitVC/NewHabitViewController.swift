@@ -243,7 +243,7 @@ class NewHabitViewController: UIViewController, UITextFieldDelegate {
             
             backgroundBlockView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             backgroundBlockView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            backgroundBlockView.heightAnchor.constraint(equalToConstant: 150),
+            backgroundBlockView.heightAnchor.constraint(equalToConstant: 150.5),
             scheduleButton.bottomAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor, constant: -24),
             
             categoryButton.topAnchor.constraint(equalTo: backgroundBlockView.topAnchor),
