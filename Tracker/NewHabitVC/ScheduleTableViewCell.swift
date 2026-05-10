@@ -53,13 +53,13 @@ class ScheduleTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         //switchControl.isOn = selected
-        //убрать выделение ячейки и можно через этот метод пойти
+        //На будущее попробую сделать нажатие не только на свич а по всей ячейке
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         onToggle = nil
-        //switchControl.removeTarget(nil, action: nil, for: .allEvents)
+        switchControl.removeTarget(nil, action: nil, for: .allEvents)
     }
     
     // MARK: - Public Methods
@@ -74,9 +74,6 @@ class ScheduleTableViewCell: UITableViewCell {
         switchControl.isOn = isSelected
         self.onToggle = onToggle
         separatorView.isHidden = isLast
-        
-//        switchControl.removeTarget(nil, action: nil, for: .allEvents)
-//        switchControl.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
     }
     
     // MARK: - Private Methods

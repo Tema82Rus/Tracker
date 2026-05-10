@@ -88,7 +88,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //setupTestData()
+        //setupTestData() трекеры для примера
         setupNavBar()
         setupViews()
         
@@ -114,13 +114,6 @@ final class TrackersViewController: UIViewController {
                 color: .systemPink,
                 emoji: "🌸",
                 timeTable: [.monday, .friday]
-            ),
-            Tracker(
-                id: UUID(),
-                title: "Кормить кота",
-                color: .systemOrange,
-                emoji: "🐈‍⬛",
-                timeTable: [.monday, .wednesday, .friday]
             )
         ]
     }
@@ -426,8 +419,6 @@ extension TrackersViewController: TrackerCellDelegate {
 
 extension TrackersViewController: NewHabitViewControllerDelegate {
     func didCreateTracker(_ tracker: Tracker, categoryName: String) {
-        //дернуть функцию для сохранения полученного трекере в основной контроллер
-        print("Пришел новый трекер \(tracker.title) и категория \(categoryName)")
         addNewTracker(tracker: tracker, categoryName: categoryName)
     }
 }

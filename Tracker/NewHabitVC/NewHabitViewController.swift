@@ -240,7 +240,6 @@ class NewHabitViewController: UIViewController, UITextFieldDelegate {
             errorLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 8),
             errorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             errorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            //errorLabel.heightAnchor.constraint(equalToConstant: 22),
             
             backgroundBlockView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             backgroundBlockView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -294,7 +293,6 @@ class NewHabitViewController: UIViewController, UITextFieldDelegate {
             guard let self else { return }
             self.selectedSchedule = Set(days)
             updateScheduleButtonTitle()
-//            updateCategoryButtonTitle()
             conditionCreateButton()
         }
         navigationController?.pushViewController(newScheduleVC, animated: true)

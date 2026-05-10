@@ -68,8 +68,6 @@ class ScheduleVC: UIViewController {
     
     // MARK: - Private Methods
     @objc private func dismissScheduleVC() {
-        //передать информацию а днях на NewHabitVC
-        //закрыть ScheduleVC
         onSave?(selectedDays)
         print(selectedDays)
         navigationController?.popViewController(animated: true)
