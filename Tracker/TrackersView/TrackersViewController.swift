@@ -173,20 +173,18 @@ final class TrackersViewController: UIViewController {
         refreshUIForSelectedDate()
     }
     
+    private func getTrackersForToday(in category: TrackerCategory) -> [Tracker] {
+        let weekday = Calendar.current.component(.weekday, from: currentDate)
+        return category.trackers.filter { $0.timeTable.contains { $0.calendarWeekDay == weekday } }
+    }
+    
     private func getVisibleCategories() -> [TrackerCategory] {
         guard !categories.isEmpty else { return [] }
-        
-        let calendar = Calendar.current
-        guard let weekday = calendar.dateComponents([.weekday], from: currentDate).weekday else { return [] }
         
         var filteredCategories: [TrackerCategory] = []
         
         for category in categories {
-            let filteredTrackers = category.trackers.filter { tracker in
-                tracker.timeTable.contains { day in
-                    day.calendarWeekDay == weekday
-                }
-            }
+            let filteredTrackers = getTrackersForToday(in: category)
             if !filteredTrackers.isEmpty {
                 filteredCategories.append(TrackerCategory(title: category.title, trackers: filteredTrackers))
             }
@@ -313,12 +311,16 @@ final class TrackersViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return visibleCategories.count
+        return getVisibleCategories().count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard section < categories.count else { return 0 }
-        return visibleCategories[section].trackers.count
+        let visibleCategories = getVisibleCategories()
+        guard section < visibleCategories.count else { return 0 }
+        
+        let category = visibleCategories[section]
+        let trackersForToday = getTrackersForToday(in: category)
+        return trackersForToday.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
