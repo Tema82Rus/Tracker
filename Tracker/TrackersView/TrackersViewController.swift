@@ -88,7 +88,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //setupTestData()
+        setupTestData()
         setupNavBar()
         setupViews()
         
@@ -196,6 +196,20 @@ final class TrackersViewController: UIViewController {
         visibleCategories = getVisibleCategories()
     }
     
+    private func isCompleted(trackerId: UUID, on date: Date) -> Bool {
+        let targetDay = Calendar.current.startOfDay(for: date)
+        return completedTrackers.contains { trackerRecord in
+            trackerRecord.id == trackerId && Calendar.current.isDate(trackerRecord.date, inSameDayAs: targetDay)
+        }
+    }
+    
+    private func isFutureDate(_ date: Date) -> Bool {
+        let todayStart = Calendar.current.startOfDay(for: Date())
+        let selectedDateStart = Calendar.current.startOfDay(for: date)
+        return selectedDateStart > todayStart
+    }
+    
+    // MARK: - Private Methods(UI)
     private func updateUI() {
         placeholderView.isHidden = !visibleCategories.isEmpty
         trackersCollectionView.isHidden = visibleCategories.isEmpty
@@ -207,7 +221,6 @@ final class TrackersViewController: UIViewController {
         updateUI()
     }
     
-    // MARK: - Private Methods(UI)
     private func setupViews() {
         view.addSubview(placeholderView)
         view.addSubview(trackersCollectionView)
@@ -326,21 +339,43 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackersCollectionViewCell.reuseIdentifier,
-                                                            for: indexPath) as? TrackersCollectionViewCell,
-            indexPath.section < visibleCategories.count,
-            indexPath.item < visibleCategories[indexPath.section].trackers.count
-        else {
-            return UICollectionViewCell()
+                                                          for: indexPath) as? TrackersCollectionViewCell
+        else { return UICollectionViewCell() }
+        
+        cell.delegate = self
+        
+        let visibleCategories = getVisibleCategories()
+        guard indexPath.section < visibleCategories.count else { return cell }
+        
+        let category = visibleCategories[indexPath.section]
+        let trackersForToday = getTrackersForToday(in: category)
+        guard indexPath.item < trackersForToday.count else { return cell }
+        
+        let tracker = trackersForToday[indexPath.item]
+        
+        let completionCount = completedTrackers.count { $0.id == tracker.id }
+        
+        let isCompleted = self.isCompleted(trackerId: tracker.id, on: currentDate)
+        
+        let isFuture = isFutureDate(currentDate)
+        cell.isUserInteractionEnabled = !isFuture
+        
+        cell.contentView.alpha = 1.0
+        
+        if isFuture {
+            cell.contentView.alpha = 0.5
+            cell.isUserInteractionEnabled = false
+        } else {
+            cell.isUserInteractionEnabled = true
         }
         
-        let tracker = visibleCategories[indexPath.section].trackers[indexPath.item]
-        cell.delegate = self
-        //cell.setup передать все данные для ячейки
-        cell.setupCell(tracker: tracker)
-        cell.setupSelectedDate(date: currentDate)
+        cell.configure(with: tracker,
+                       isCompleted: isCompleted,
+                       isFutureDate: isFuture,
+                       numbersOfCompletedTrackers: completionCount
+        )
         cell.backgroundColor = .clear
         return cell
-        //3 шага: создание, передача данных и вернул ячейку
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -375,21 +410,15 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension TrackersViewController: TrackerCellDelegate {
-    func didAddCompletion(for tracker: Tracker, on date: Date) {
-        let completedTracker = TrackerRecord(id: tracker.id, date: date)
-        completedTrackers.insert(completedTracker)
-        print("Трекер \(tracker.title) сохранен")
-        print("Список выполненных трекеров: \(completedTrackers)")
-    }
-    func removeAddCompletion(for tracker: Tracker, on date: Date) {
-        let completedTracker = TrackerRecord(id: tracker.id, date: date)
-        completedTrackers.remove(completedTracker)
-        print("Трекер \(tracker.title) удален")
-        print("Список выполненных трекеров ниже:")
-        for tracker in completedTrackers {
-            print("Id: \(tracker.id) date: \(tracker.date)")
+    func addOrRemoveCompletionTracker(for tracker: Tracker, isCompletedInCell: Bool) {
+        let trackerRecord = TrackerRecord(id: tracker.id, date: currentDate)
+        if isCompletedInCell {
+            completedTrackers.insert(trackerRecord)
+            print("Трекер \(tracker.title) сохранен")
+        } else {
+            completedTrackers.remove(trackerRecord)
+            print("Трекер \(tracker.title) удален")
         }
-        
     }
 }
 

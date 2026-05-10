@@ -6,10 +6,9 @@
 //
 
 import UIKit
-//СДелать тупой ячейку то есть неперегружать ее разными зависимостями
+
 protocol TrackerCellDelegate: AnyObject {
-    func didAddCompletion(for tracker: Tracker, on date: Date)
-    func removeAddCompletion(for tracker: Tracker, on date: Date)
+    func addOrRemoveCompletionTracker(for tracker: Tracker, isCompletedInCell: Bool)
 }
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
@@ -74,8 +73,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private var tracker: Tracker?
     private var isCompleted = false
     private var completionCount = 0
-    private var selectedDate: Date?
-    private var currentDate = Date()
+    
     // MARK: - Static Properties
     static let reuseIdentifier: String = "TrackersCollectionViewCell"
     
@@ -83,57 +81,86 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        setupCell(count: 0)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Public Methods
-    func setupCell(tracker: Tracker) {
-        titleLabel.text = tracker.title
-        cellColorView.backgroundColor = tracker.color
-        completeButton.tintColor = tracker.color
-        emojiLabel.text = tracker.emoji
+    // MARK: - Override Methods
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        tracker = nil
+        isCompleted = false
+        completionCount = 0
+        delegate = nil
         
+        cellColorView.backgroundColor = nil
+        emojiLabel.text = nil
+        titleLabel.text = nil
+        counterLabel.text = nil
+        completeButton.isSelected = false
+        completeButton.isEnabled = true
+        contentView.alpha = 1.0
+    }
+    
+    // MARK: - Public Methods
+    func configure(
+        with tracker: Tracker,
+        isCompleted: Bool,
+        isFutureDate: Bool,
+        numbersOfCompletedTrackers: Int
+    ) {
         self.tracker = tracker
-        if isCompleted {
-            completeButton.isSelected = true
-            counterLabel.text = "\(completionCount) дней"
+        self.isCompleted = isCompleted
+        self.completionCount = numbersOfCompletedTrackers
+        
+        let cellColor = tracker.color
+        cellColorView.backgroundColor = cellColor
+        
+        completeButton.backgroundColor = cellColor
+        completeButton.tintColor = .white
+        
+        let word = declinationOfDays(numbersOfCompletedTrackers)
+        counterLabel.text = "\(numbersOfCompletedTrackers) \(word)"
+        
+        emojiLabel.text = tracker.emoji
+        titleLabel.text = tracker.title
+        
+        completeButton.isSelected = isCompleted
+        
+        if isFutureDate {
+            completeButton.alpha = 0.5
+        } else {
+            completeButton.alpha = isCompleted ? 0.6 : 1.0
         }
-    }
-    
-    func setupCell(count: Int) {
-        counterLabel.text = "\(count) дней"
-    }
-    
-    func setupSelectedDate(date: Date) {
-        selectedDate = date
     }
     
     // MARK: - Private Methods
-    @objc private func buttonCompletedTapped() {
-        guard let tracker = tracker, let selectedDate = selectedDate else { return }
+    private func declinationOfDays(_ count: Int) -> String {
+        let lastTwoDigits = count % 100
         
-        if !(selectedDate > currentDate) {
-            isCompleted = !isCompleted
-            completeButton.isSelected = isCompleted
-            
-            if isCompleted {
-                completionCount += 1
-                delegate?.didAddCompletion(for: tracker, on: selectedDate)
-            } else {
-                completionCount -= 1
-                delegate?.removeAddCompletion(for: tracker, on: selectedDate)
-            }
-            
-            setupCell(count: completionCount)
-            
-            
-        } else {
-            print("Нельзя отметить карточку для будущей даты")
+        if (11...14).contains(lastTwoDigits) {
+            return "Дней"
         }
+        
+        switch count % 10 {
+        case 1:
+            return "день"
+        case 2, 3, 4:
+            return "дня"
+        default:
+            return "дней"
+        }
+    }
+    
+    @objc private func buttonCompletedTapped() {
+        guard let tracker = tracker else { return }
+        
+        isCompleted.toggle()
+        completeButton.isSelected = isCompleted
+        //completeButton.backgroundColor = tracker.color
+        delegate?.addOrRemoveCompletionTracker(for: tracker, isCompletedInCell: isCompleted)
     }
     
     private func setupViews() {
