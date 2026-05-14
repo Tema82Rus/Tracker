@@ -184,8 +184,8 @@ class NewHabitViewController: UIViewController, UITextFieldDelegate {
         return button
     }()
     
-    private var categoryButtonTopWhenErrorHidden: NSLayoutConstraint!
-    private var categoryButtonTopWhenErrorVisible: NSLayoutConstraint!
+    private var categoryButtonTopWhenErrorHidden: NSLayoutConstraint?
+    private var categoryButtonTopWhenErrorVisible: NSLayoutConstraint?
     
     private var selectedCategory: String = "Важное"
     private var selectedSchedule: Set<WeekDay> = []
@@ -275,7 +275,7 @@ class NewHabitViewController: UIViewController, UITextFieldDelegate {
         categoryButtonTopWhenErrorHidden = categoryButton.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 24)
         categoryButtonTopWhenErrorVisible = categoryButton.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 32)
         
-        categoryButtonTopWhenErrorHidden.isActive = true
+        categoryButtonTopWhenErrorHidden?.isActive = true
     }
     
     @objc private func textFieldDidChange() {
@@ -283,8 +283,8 @@ class NewHabitViewController: UIViewController, UITextFieldDelegate {
         let isOverLimit = text.count >= 38
         errorLabel.isHidden = !isOverLimit
         
-        categoryButtonTopWhenErrorHidden.isActive = !isOverLimit
-        categoryButtonTopWhenErrorVisible.isActive = isOverLimit
+        categoryButtonTopWhenErrorHidden?.isActive = !isOverLimit
+        categoryButtonTopWhenErrorVisible?.isActive = isOverLimit
     }
     
     @objc private func addTapCategory() {

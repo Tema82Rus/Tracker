@@ -352,15 +352,8 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         let isFuture = isFutureDate(currentDate)
         cell.isUserInteractionEnabled = !isFuture
-        
-        cell.contentView.alpha = 1.0
-        
-        if isFuture {
-            cell.contentView.alpha = 0.5
-            cell.isUserInteractionEnabled = false
-        } else {
-            cell.isUserInteractionEnabled = true
-        }
+        cell.contentView.alpha = isFuture ? 0.5 : 1
+        cell.isUserInteractionEnabled = !isFuture
         
         cell.configure(with: tracker,
                        isCompleted: isCompleted,
@@ -379,11 +372,13 @@ extension TrackersViewController: UICollectionViewDataSource {
         case UICollectionView.elementKindSectionFooter:
             id = "footer"
         default:
-            fatalError("Unsupported supplementary view kind: \(kind)")
+            assertionFailure("Unsupported supplementary view kind: \(kind)")
+            return UICollectionReusableView()
         }
         
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? SupplementaryView else {
-            fatalError("Failed to dequeue supplementary view of kind: \(kind) with identifier: \(id)")
+            assertionFailure("Failed to dequeue supplementary view of kind: \(kind) with identifier: \(id)")
+            return UICollectionReusableView()
         }
         let category = getVisibleCategories()[indexPath.section]
         header.setupHeader(title: category.title)

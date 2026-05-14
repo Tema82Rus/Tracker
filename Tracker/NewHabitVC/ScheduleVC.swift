@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ScheduleVC: UIViewController {
+final class ScheduleVC: UIViewController {
     // MARK: - Public Properties
     var selectedDays: Set<WeekDay> = []
     var onSave: ((Set<WeekDay>) -> Void)?

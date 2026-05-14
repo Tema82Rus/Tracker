@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ScheduleTableViewCell: UITableViewCell {
+final class ScheduleTableViewCell: UITableViewCell {
     // MARK: - Public Properties
     var onToggle: ((Bool) -> Void)?
     
@@ -45,8 +45,9 @@ class ScheduleTableViewCell: UITableViewCell {
         setupViews()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        nil
     }
     
     // MARK: - Override methods

@@ -158,7 +158,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }
     
     @objc private func buttonCompletedTapped() {
-        guard let tracker = tracker else { return }
+        guard let tracker else { return }
         
         isCompleted.toggle()
         completeButton.isSelected = isCompleted

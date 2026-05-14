@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SupplementaryView: UICollectionReusableView {
+final class SupplementaryView: UICollectionReusableView {
     // MARK: - Private Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
