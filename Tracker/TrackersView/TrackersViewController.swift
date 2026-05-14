@@ -26,7 +26,7 @@ final class TrackersViewController: UIViewController {
         
         let label = UILabel()
         label.text = "Что будем отслеживать?"
-        label.textColor = .blackDay
+        label.textColor = .appBlack
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.sizeToFit()
         label.textAlignment = .center
@@ -255,7 +255,7 @@ final class TrackersViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.rightBarButtonItem = datePickerButton
-        navigationController?.navigationBar.tintColor = .blackDay
+        navigationController?.navigationBar.tintColor = .appBlack
     }
     
     private func createCollectionViewLayout() -> UICollectionViewLayout {

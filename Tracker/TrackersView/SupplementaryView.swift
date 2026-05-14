@@ -12,7 +12,7 @@ final class SupplementaryView: UICollectionReusableView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 19, weight: .bold)
-        label.textColor = .blackDay
+        label.textColor = .appBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

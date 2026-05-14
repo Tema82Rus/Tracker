@@ -17,7 +17,7 @@ final class ScheduleVC: UIViewController {
         let label = UILabel()
         label.text = "Расписание"
         label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.textColor = .blackDay
+        label.textColor = .appBlack
         label.textAlignment = .center
         label.sizeToFit()
         return label
@@ -43,7 +43,7 @@ final class ScheduleVC: UIViewController {
     
     private lazy var doneButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .blackDay
+        button.backgroundColor = .appBlack
         button.layer.cornerRadius = 16
         button.clipsToBounds = true
         button.setTitle("Готово", for: .normal)

@@ -15,7 +15,7 @@ final class ScheduleTableViewCell: UITableViewCell {
     private lazy var weekDayTitleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.textColor = .blackDay
+        label.textColor = .appBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

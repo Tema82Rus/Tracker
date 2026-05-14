@@ -28,7 +28,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private lazy var emojiLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        label.textColor = .blackDay
+        label.textColor = .appBlack
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -45,7 +45,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private lazy var counterLabel: UILabel = {
         let title = UILabel()
         title.font = .systemFont(ofSize: 12, weight: .medium)
-        title.textColor = .blackDay
+        title.textColor = .appBlack
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
     }()
