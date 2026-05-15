@@ -372,15 +372,25 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func createButtonTapped() {
-        guard let nameTracker = textField.text, !nameTracker.isEmpty else { return }
+        guard let nameTracker = textField.text, !nameTracker.isEmpty,
+                let emojiIndex = selectedEmojiIndex,
+                let colorIndex = selectedColorIndex else { return }
+        
+        print("📦 NewHabitVC: создаем трекер с расписанием: \(selectedSchedule.map { $0.rawValue })")
+        
+        let category = selectedCategory
+        
         let newTracker = Tracker(id: UUID(),
                                  title: nameTracker,
-                                 color: .systemGreen,
-                                 emoji: "✅",
+                                 color: colors[colorIndex],
+                                 emoji: emojis[emojiIndex],
                                  timeTable: selectedSchedule
         )
-        let newCategoryTitle = selectedCategory
-        delegate?.didCreateTracker(newTracker, categoryName: newCategoryTitle)
+        
+        print("🚀 NewHabitVC: отправляем трекер в TrackersViewController")
+        
+        //let newCategoryTitle = selectedCategory
+        delegate?.didCreateTracker(newTracker, categoryName: category)
         dismiss(animated: true)
     }
     
@@ -454,7 +464,12 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
     private func conditionCreateButton() {
         let hasName = !(textField.text?.isEmpty ?? true)
         let hasSchedule = !selectedSchedule.isEmpty
-        let isValid = hasName && hasSchedule
+        
+        let hasEmoji = selectedEmojiIndex != nil
+        let hasColor = selectedColorIndex != nil
+        
+        let isValid = hasName && hasSchedule && hasEmoji && hasColor
+        
         createButton.isEnabled = isValid
         createButton.backgroundColor = isValid ? .appBlack : .appGray
     }
@@ -589,5 +604,17 @@ extension NewHabitViewController: UICollectionViewDataSource {
 }
 
 extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let section = Section(rawValue: indexPath.section) else { return }
+        
+        switch section {
+        case .emoji:
+            selectedEmojiIndex = indexPath.item
+            collectionView.reloadSections(IndexSet(integer: Section.emoji.rawValue))
+        case .color:
+            selectedColorIndex = indexPath.item
+            collectionView.reloadSections(IndexSet(integer: Section.color.rawValue))
+        }
+        conditionCreateButton()
+    }
 }
