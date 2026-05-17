@@ -239,7 +239,33 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         navigationItem.titleView = titleLabel
+        
         setupViews()
+        conditionCreateButton()
+        updateCategoryButtonTitle()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        print("=== ПОДРОБНАЯ ОТЛАДКА ===")
+        print("scrollView frame: \(scrollView.frame)")
+        print("scrollView contentSize: \(scrollView.contentSize)")
+        print("contentView frame: \(contentView.frame)")
+        print("textField frame: \(textField.frame)")
+        print("backgroundBlockView frame: \(backgroundBlockView.frame)")
+        print("emojiAndColorCollectionView frame: \(emojiAndColorCollectionView.frame)")
+        
+        let totalContentHeight = textField.frame.height + 24 +
+        backgroundBlockView.frame.height + 32 +
+        emojiAndColorCollectionView.frame.height + 32
+        print("Расчетная высота контента: \(totalContentHeight)")
+        print("scrollView bounds height: \(scrollView.bounds.height)")
+        print("Нужен скролл: \(totalContentHeight > scrollView.bounds.height)")
+        
+        // Принудительно включаем скролл для теста
+        scrollView.isScrollEnabled = true
+        scrollView.alwaysBounceVertical = true
     }
     
     // MARK: Private Methods
@@ -288,7 +314,6 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
             backgroundBlockView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             backgroundBlockView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             backgroundBlockView.heightAnchor.constraint(equalToConstant: 150.5),
-            scheduleButton.bottomAnchor.constraint(lessThanOrEqualTo: contentView.keyboardLayoutGuide.topAnchor, constant: -24),
             
             categoryButton.topAnchor.constraint(equalTo: backgroundBlockView.topAnchor),
             categoryButton.heightAnchor.constraint(equalToConstant: 75),
@@ -305,6 +330,7 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
             scheduleButton.trailingAnchor.constraint(equalTo: backgroundBlockView.trailingAnchor),
             scheduleButton.heightAnchor.constraint(equalToConstant: 75),
             scheduleButton.bottomAnchor.constraint(equalTo: backgroundBlockView.bottomAnchor),
+            scheduleButton.bottomAnchor.constraint(lessThanOrEqualTo: contentView.keyboardLayoutGuide.topAnchor, constant: -24),
             
             emojiAndColorCollectionView.topAnchor.constraint(equalTo: backgroundBlockView.bottomAnchor, constant: 32),
             emojiAndColorCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -312,9 +338,9 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
             emojiAndColorCollectionView.heightAnchor.constraint(equalToConstant: 550),
             emojiAndColorCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -32),
             
-            stackBottomButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            stackBottomButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            stackBottomButton.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor),
+            stackBottomButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            stackBottomButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            stackBottomButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             stackBottomButton.heightAnchor.constraint(equalToConstant: 60),
             
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
