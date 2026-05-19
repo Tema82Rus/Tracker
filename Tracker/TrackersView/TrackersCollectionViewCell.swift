@@ -139,6 +139,12 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    func updateCounter(_ newCount: Int) {
+        completionCount = newCount
+        let word = declinationOfDays(newCount)
+        counterLabel.text = "\(newCount) \(word)"
+    }
+    
     // MARK: - Private Methods
     private func declinationOfDays(_ count: Int) -> String {
         let lastTwoDigits = count % 100

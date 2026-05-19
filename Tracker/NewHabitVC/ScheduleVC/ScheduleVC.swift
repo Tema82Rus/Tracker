@@ -68,6 +68,7 @@ final class ScheduleVC: UIViewController {
     
     // MARK: - Private Methods
     @objc private func dismissScheduleVC() {
+        print("📤 ScheduleVC: передаем выбранные дни: \(selectedDays.map { $0.rawValue })")
         onSave?(selectedDays)
         print(selectedDays)
         navigationController?.popViewController(animated: true)

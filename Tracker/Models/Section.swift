@@ -14,7 +14,7 @@ enum Section: Int, CaseIterable {
     var title: String {
         switch self {
         case .emoji: return "Emoji"
-        case .color: return "Color"
+        case .color: return "Цвет"
         }
     }
 }

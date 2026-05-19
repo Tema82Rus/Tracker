@@ -21,7 +21,9 @@ final class TabBarController: UITabBarController {
     private func setupTabBar() {
         addTopDividerToBar()
         
-        let trackersVC = TrackersViewController()
+        let store = AppDependencies.shared.makeTrackerStore()
+        let recordStore = AppDependencies.shared.makeRecordStore()
+        let trackersVC = TrackersViewController(store: store, recordStore: recordStore)
         let statisticsVC = StatisticsViewController()
         
         trackersVC.tabBarItem = UITabBarItem(title: "Трекеры", image: UIImage(resource: .trackers), tag: 0)
