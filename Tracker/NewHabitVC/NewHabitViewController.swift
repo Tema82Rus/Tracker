@@ -103,7 +103,7 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
             chevron.widthAnchor.constraint(equalToConstant: 7),
             chevron.heightAnchor.constraint(equalToConstant: 12),
             chevron.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -24),
-            chevron.centerYAnchor.constraint(equalTo: button.titleLabel!.centerYAnchor)
+            chevron.centerYAnchor.constraint(equalTo: button.centerYAnchor)
         ])
         
         button.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -132,7 +132,7 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
             chevron.widthAnchor.constraint(equalToConstant: 7),
             chevron.heightAnchor.constraint(equalToConstant: 12),
             chevron.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -24),
-            chevron.centerYAnchor.constraint(equalTo: button.titleLabel!.centerYAnchor)
+            chevron.centerYAnchor.constraint(equalTo: button.centerYAnchor)
         ])
         
         button.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]

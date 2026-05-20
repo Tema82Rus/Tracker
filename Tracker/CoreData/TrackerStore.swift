@@ -234,13 +234,13 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
     ) {
         switch type {
         case .insert:
-            print("Вставлен объект по пути: \(newIndexPath!)")
+            print("Вставлен объект по пути: \(String(describing: newIndexPath?.debugDescription ?? nil))")
         case .delete:
-            print("Удален объект по пути: \(indexPath!)")
+            print("Удален объект по пути: \(String(describing: indexPath?.debugDescription ?? "nil"))")
         case .update:
-            print("Обновлен объект по пути: \(indexPath!)")
+            print("Обновлен объект по пути: \(String(describing: indexPath?.debugDescription ?? "nil"))")
         case .move:
-            print("Объект перемещен с \(indexPath!) на \(newIndexPath!)")
+            print("Объект перемещен с \(String(describing: indexPath?.debugDescription ?? "nil")) на \(String(describing: newIndexPath?.debugDescription ?? "nil"))")
         @unknown default:
             break
         }

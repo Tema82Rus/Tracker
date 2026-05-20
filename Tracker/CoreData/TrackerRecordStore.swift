@@ -69,7 +69,10 @@ final class TrackerRecordStore: Store {
     func removeRecord(trackerId: UUID, date: Date) throws {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else {
+            print("⚠️ Не удалось вычислить endOfDay для даты \(date). Пропускаем удаление записей.")
+            return
+        }
         
         let predicate = NSPredicate(
             format: "trackerId == %@ AND date >= %@ AND date < %@",
