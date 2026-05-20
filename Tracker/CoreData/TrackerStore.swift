@@ -9,30 +9,10 @@ import UIKit
 internal import CoreData
 
 final class TrackerStore: Store {
-    
+    // MARK: - Delegate
     weak var delegate: StoreDelegate?
     
-    private enum TrackerEntity {
-        static let name = "TrackerCoreData"
-        static let trackerId = "trackerId"
-        static let nameTracker = "nameTracker"
-        static let colorTracker = "colorTracker"
-        static let emoji = "emoji"
-        static let schedule = "schedule"
-        static let category = "category"
-    }
-    
-    private enum CategoryEntity {
-        static let title = "title"
-        static let trackers = "trackers"
-    }
-    private let categoryStore: TrackerCategoryStore
-    
-    init(context: NSManagedObjectContext, categoryStore: TrackerCategoryStore) {
-        self.categoryStore = categoryStore
-        super.init(context: context)
-    }
-    
+    // MARK: - Open Properties
     lazy var fetchedResultsController: NSFetchedResultsController<NSManagedObject> = {
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: TrackerEntity.name)
         
@@ -50,6 +30,16 @@ final class TrackerStore: Store {
         return controller
     }()
     
+    // MARK: - Private Properties
+    private let categoryStore: TrackerCategoryStore
+    
+    // MARK: - Initialisers
+    init(context: NSManagedObjectContext, categoryStore: TrackerCategoryStore) {
+        self.categoryStore = categoryStore
+        super.init(context: context)
+    }
+    
+    // MARK: - Public Methods
     func createTracker(
         id: UUID,
         name: String,
@@ -76,46 +66,6 @@ final class TrackerStore: Store {
         return try decodeTracker(from: trackerObject)
     }
     
-    private func decodeTracker(from object: NSManagedObject) throws -> Tracker {
-        guard let id = object.value(forKey: TrackerEntity.trackerId) as? UUID,
-              let title = object.value(forKey: TrackerEntity.nameTracker) as? String,
-              let color = object.value(forKey: TrackerEntity.colorTracker) as? UIColor,
-              let emoji = object.value(forKey: TrackerEntity.emoji) as? String
-        else {
-            throw StoreError.decodingError("Не удалось декодировать трекер")
-        }
-        var schedule: Set<WeekDay> = []
-        if let weekdays = object.value(forKey: TrackerEntity.schedule) as? Set<WeekDay> {
-            schedule = weekdays
-            print("🔵 Прочитано расписание как Set<WeekDay>: \(weekdays)")
-        }
-        else if let array = object.value(forKey: TrackerEntity.schedule) as? NSArray {
-            let weekdays = array.compactMap { $0 as? WeekDay }
-            schedule = Set(weekdays)
-            print("🔵 Прочитано расписание как NSArray с WeekDay: \(weekdays)")
-        }
-        else if let scheduleArray = object.value(forKey: TrackerEntity.schedule) as? [Int] {
-            schedule = Set(scheduleArray.compactMap { WeekDay(rawValue: $0) })
-            print("🔵 Прочитано расписание как [Int]: \(scheduleArray)")
-        }
-        else if let data = object.value(forKey: TrackerEntity.schedule) as? Data {
-            if let scheduleArray = try? JSONDecoder().decode([Int].self, from: data) {
-                schedule = Set(scheduleArray.compactMap { WeekDay(rawValue: $0) })
-                print("🔵 Прочитано расписание как Data: \(scheduleArray)")
-            }
-        }
-        else if let anyValue = object.value(forKey: TrackerEntity.schedule) {
-            print("⚠️ Неизвестный тип schedule: \(type(of: anyValue)) = \(anyValue)")
-        }
-        return Tracker(
-            id: id,
-            title: title,
-            color: color,
-            emoji: emoji,
-            timeTable: schedule
-        )
-    }
-    
     func fetchTracker(by id: UUID) throws -> Tracker? {
         let context = self.context
         let request = NSFetchRequest<NSManagedObject>(entityName: TrackerEntity.name)
@@ -128,6 +78,7 @@ final class TrackerStore: Store {
         
         return try decodeTracker(from: trackerObject)
     }
+    
     func fetchAllTrackers() throws -> [Tracker] {
         let context = self.context
         let request = NSFetchRequest<NSManagedObject>(entityName: TrackerEntity.name)
@@ -200,12 +151,51 @@ final class TrackerStore: Store {
         // 3. Сохраняем
         try saveContext()
     }
+    
+    // MARK: - Private Methods
+    private func decodeTracker(from object: NSManagedObject) throws -> Tracker {
+        guard let id = object.value(forKey: TrackerEntity.trackerId) as? UUID,
+              let title = object.value(forKey: TrackerEntity.nameTracker) as? String,
+              let color = object.value(forKey: TrackerEntity.colorTracker) as? UIColor,
+              let emoji = object.value(forKey: TrackerEntity.emoji) as? String
+        else {
+            throw StoreError.decodingError("Не удалось декодировать трекер")
+        }
+        var schedule: Set<WeekDay> = []
+        if let weekdays = object.value(forKey: TrackerEntity.schedule) as? Set<WeekDay> {
+            schedule = weekdays
+            print("🔵 Прочитано расписание как Set<WeekDay>: \(weekdays)")
+        }
+        else if let array = object.value(forKey: TrackerEntity.schedule) as? NSArray {
+            let weekdays = array.compactMap { $0 as? WeekDay }
+            schedule = Set(weekdays)
+            print("🔵 Прочитано расписание как NSArray с WeekDay: \(weekdays)")
+        }
+        else if let scheduleArray = object.value(forKey: TrackerEntity.schedule) as? [Int] {
+            schedule = Set(scheduleArray.compactMap { WeekDay(rawValue: $0) })
+            print("🔵 Прочитано расписание как [Int]: \(scheduleArray)")
+        }
+        else if let data = object.value(forKey: TrackerEntity.schedule) as? Data {
+            if let scheduleArray = try? JSONDecoder().decode([Int].self, from: data) {
+                schedule = Set(scheduleArray.compactMap { WeekDay(rawValue: $0) })
+                print("🔵 Прочитано расписание как Data: \(scheduleArray)")
+            }
+        }
+        else if let anyValue = object.value(forKey: TrackerEntity.schedule) {
+            print("⚠️ Неизвестный тип schedule: \(type(of: anyValue)) = \(anyValue)")
+        }
+        return Tracker(
+            id: id,
+            title: title,
+            color: color,
+            emoji: emoji,
+            timeTable: schedule
+        )
+    }
 }
 
-extension TrackerStore:  NSFetchedResultsControllerDelegate {
-    
-    
-    
+// MARK: - NSFetchedResultsControllerDelegate
+extension TrackerStore: NSFetchedResultsControllerDelegate {
     func setupFetchedResultsController(with predicate: NSPredicate? = nil) throws {
         fetchedResultsController.fetchRequest.predicate = predicate
         try fetchedResultsController.performFetch()

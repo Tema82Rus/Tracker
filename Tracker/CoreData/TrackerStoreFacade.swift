@@ -9,16 +9,19 @@ import Foundation
 internal import CoreData
 
 final class TrackerStoreFacade: TrackerStoreProtocol {
+    // MARK: - Private Properties
     private let trackerStore: TrackerStore
     private let categoryStore: TrackerCategoryStore
     private let recordStore: TrackerRecordStore
     
+    // MARK: - Initialisers
     init(trackerStore: TrackerStore, categoryStore: TrackerCategoryStore, recordStore: TrackerRecordStore) {
         self.trackerStore = trackerStore
         self.categoryStore = categoryStore
         self.recordStore = recordStore
     }
     
+    // MARK: - Public Methods
     func fetchAllCategories() throws -> [TrackerCategory] {
         return try categoryStore.fetchAllCategories()
     }
