@@ -32,6 +32,7 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
         textField.clipsToBounds = true
         textField.placeholder = "Введите название трекера"
         textField.font = .systemFont(ofSize: 17, weight: .regular)
+        textField.clearButtonMode = .whileEditing
         textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -297,10 +298,6 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
         textField.leftView = leftPaddingView
         textField.leftViewMode = .always
         
-        let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
-        textField.rightView = rightPaddingView
-        textField.rightViewMode = .always
-        
         NSLayoutConstraint.activate([
             textField.heightAnchor.constraint(equalToConstant: 75),
             textField.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 24),
@@ -372,6 +369,7 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
         
         categoryButtonTopWhenErrorHidden?.isActive = !isOverLimit
         categoryButtonTopWhenErrorVisible?.isActive = isOverLimit
+        conditionCreateButton()
     }
     
     @objc private func addTapCategory() {
@@ -667,3 +665,13 @@ extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
         conditionCreateButton()
     }
 }
+
+extension NewHabitViewController {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let currentText = textField.text else { return true }
+
+        let newLength = currentText.count + string.count - range.length
+        return newLength <= 38
+    }
+}
+
