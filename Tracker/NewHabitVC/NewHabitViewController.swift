@@ -570,6 +570,20 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
         
         return section
     }
+    
+    private func reloadSelection(
+        in collectionView: UICollectionView,
+        section: Int,
+        previousIndex: Int?,
+        currentIndex: Int?
+    ) {
+        let indexes = Set([previousIndex, currentIndex].compactMap { $0 })
+        let indexPaths = indexes.map { IndexPath(item: $0, section: section) }
+
+        UIView.performWithoutAnimation {
+            collectionView.reloadItems(at: indexPaths)
+        }
+    }
 }
 
 extension NewHabitViewController: UICollectionViewDataSource {
@@ -632,11 +646,23 @@ extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
         
         switch section {
         case .emoji:
+            let previousIndex = selectedEmojiIndex
             selectedEmojiIndex = indexPath.item
-            collectionView.reloadSections(IndexSet(integer: Section.emoji.rawValue))
+            reloadSelection(
+                in: collectionView,
+                section: Section.emoji.rawValue,
+                previousIndex: previousIndex,
+                currentIndex: selectedEmojiIndex
+            )
         case .color:
+            let previousIndex = selectedColorIndex
             selectedColorIndex = indexPath.item
-            collectionView.reloadSections(IndexSet(integer: Section.color.rawValue))
+            reloadSelection(
+                in: collectionView,
+                section: Section.color.rawValue,
+                previousIndex: previousIndex,
+                currentIndex: selectedColorIndex
+            )
         }
         conditionCreateButton()
     }
