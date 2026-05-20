@@ -9,9 +9,21 @@ import UIKit
 internal import CoreData
 
 @main
-final class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate, ManagedObjectContextProvider {
+    // MARK: - Singleton
+    static var shared: AppDelegate {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            fatalError("AppDelegate не найден")
+        }
+        return appDelegate
+    }
     
+    // MARK: - Public Properties
     var window: UIWindow?
+    
+    var viewContext: NSManagedObjectContext {
+        return persistentContainer.viewContext
+    }
     
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "CoreData")
@@ -27,10 +39,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         return container
     }()
     
-    var context: NSManagedObjectContext {
-        return persistentContainer.viewContext
-    }
-    
+    // MARK: - Public Methods
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         CoreDataTransformers.register()
         print("✅ Трансформеры зарегистрированы")
@@ -38,7 +47,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func saveContext() {
-        let context = context
+        let context = viewContext
         if context.hasChanges {
             do {
                 try context.save()
@@ -48,8 +57,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    // MARK: UISceneSession Lifecycle
-    
+    // MARK: - UISceneSession Lifecycle
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.

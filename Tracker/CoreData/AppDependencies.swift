@@ -6,26 +6,22 @@
 //
 
 import UIKit
-internal import CoreData
 
 final class AppDependencies {
     // MARK: - Static Properties
     static let shared = AppDependencies()
     
     // MARK: - Private Properties
-    private let context: NSManagedObjectContext
+    private let contextProvider: ManagedObjectContextProvider
     
     // MARK: - Private Initialisers
-    private init() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            fatalError("AppDelegate не найден")
-        }
-        self.context = appDelegate.persistentContainer.viewContext
+    private init(contextProvider: ManagedObjectContextProvider = AppDelegate.shared) {
+        self.contextProvider = contextProvider
     }
     
     // MARK: - Public Methods
     func makeTrackerStore() -> TrackerStoreProtocol {
-        let context = self.context
+        let context = contextProvider.viewContext
         let categoryStore = TrackerCategoryStore(context: context)
         let trackerStore = TrackerStore(context: context, categoryStore: categoryStore)
         let recordStore = TrackerRecordStore(context: context)
@@ -37,7 +33,7 @@ final class AppDependencies {
     }
     
     func makeRecordStore() -> RecordStoreProtocol {
-        return TrackerRecordStore(context: context)
+        return TrackerRecordStore(context: contextProvider.viewContext)
     }
 }
 
