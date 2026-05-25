@@ -15,4 +15,5 @@ enum StoreError: Error {
     case trackerNotFound
     case categoryNotFound
     case recordNotFound
+    case categoryAlreadyExists
 }

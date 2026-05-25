@@ -15,4 +15,5 @@ enum TrackerEntity {
     static let emoji = "emoji"
     static let schedule = "schedule"
     static let category = "category"
+    static let isPinned = "isPinned"
 }
