@@ -37,6 +37,29 @@ final class TrackerStoreFacade: TrackerStoreProtocol {
         }
     }
     
+    func togglePin(for trackerId: UUID) throws {
+        try trackerStore.togglePin(for: trackerId)
+    }
     
+    func fetchAllPinnedTrackerIds() throws -> [UUID] {
+        try trackerStore.fetchAllPinnedTrackerIds()
+    }
+    
+    func deleteTracker(id: UUID) throws {
+        try trackerStore.deleteTracker(id: id)
+    }
+    
+    func updateTracker(newTracker: Tracker, categoryTitle: String?) throws {
+        var categoryEntity: TrackerCategoryCoreData?
+        if let categoryTitle = categoryTitle {
+            categoryEntity = try categoryStore.fetchCategoryCoreData(by: categoryTitle)
+        }
+        
+        try trackerStore.updateTracker(newTracker: newTracker, category: categoryEntity)
+    }
+    
+    func fetchCategoryForTracker(trackerId: UUID) throws -> String? {
+        return try trackerStore.fetchCategoryForTracker(trackerId: trackerId)
+    }
 }
 

@@ -73,6 +73,16 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    private lazy var pinImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "pin.fill")
+        imageView.tintColor = .ypWhite
+        imageView.isHidden = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private var tracker: Tracker?
     private var isCompleted = false
     private var completionCount = 0
@@ -110,6 +120,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     // MARK: - Public Methods
     func configure(
         with tracker: Tracker,
+        isPinned: Bool,
         isCompleted: Bool,
         isFutureDate: Bool,
         numbersOfCompletedTrackers: Int
@@ -124,7 +135,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         completeButton.backgroundColor = .clear
         completeButton.tintColor = cellColor
         
-        let word = declinationOfDays(numbersOfCompletedTrackers)
+        let word = Self.declinationOfDays(numbersOfCompletedTrackers)
         counterLabel.text = "\(numbersOfCompletedTrackers) \(word)"
         
         emojiLabel.text = tracker.emoji
@@ -137,16 +148,19 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         } else {
             completeButton.alpha = isCompleted ? 0.6 : 1.0
         }
+        
+        pinImageView.isHidden = !isPinned
+        pinImageView.tintColor = .white
+        pinImageView.backgroundColor = .clear
     }
     
     func updateCounter(_ newCount: Int) {
         completionCount = newCount
-        let word = declinationOfDays(newCount)
+        let word = Self.declinationOfDays(newCount)
         counterLabel.text = "\(newCount) \(word)"
     }
     
-    // MARK: - Private Methods
-    private func declinationOfDays(_ count: Int) -> String {
+    static func declinationOfDays(_ count: Int) -> String {
         let lastTwoDigits = count % 100
         
         if (11...14).contains(lastTwoDigits) {
@@ -163,6 +177,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    // MARK: - Private Methods
     @objc private func buttonCompletedTapped() {
         guard let tracker else { return }
         
@@ -178,6 +193,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(completeButton)
         emojiLabelBackgroundView.addSubview(emojiLabel)
         contentView.addSubview(emojiLabelBackgroundView)
+        contentView.addSubview(pinImageView)
         
         NSLayoutConstraint.activate([
             cellColorView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -203,6 +219,11 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             emojiLabelBackgroundView.leadingAnchor.constraint(equalTo: cellColorView.leadingAnchor, constant: 12),
             emojiLabel.centerXAnchor.constraint(equalTo: emojiLabelBackgroundView.centerXAnchor),
             emojiLabel.centerYAnchor.constraint(equalTo: emojiLabelBackgroundView.centerYAnchor),
+            
+            pinImageView.widthAnchor.constraint(equalToConstant: 16),
+            pinImageView.heightAnchor.constraint(equalToConstant: 24),
+            pinImageView.centerYAnchor.constraint(equalTo: emojiLabel.centerYAnchor),
+            pinImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
         ])
     }
 }

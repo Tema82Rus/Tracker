@@ -46,7 +46,8 @@ final class TrackerStore: Store {
         color: UIColor,
         emoji: String,
         schedule: Set<WeekDay>,
-        category: TrackerCategoryCoreData
+        category: TrackerCategoryCoreData,
+        isPinned: Bool = false
     ) throws -> Tracker {
         let context = self.context
         let trackerObject = NSEntityDescription.insertNewObject(forEntityName: TrackerEntity.name, into: context)
@@ -59,6 +60,7 @@ final class TrackerStore: Store {
         trackerObject.setValue(schedule, forKey: TrackerEntity.schedule)
         
         trackerObject.setValue(category, forKey: TrackerEntity.category)
+        trackerObject.setValue(isPinned, forKey: TrackerEntity.isPinned)
         
         try saveContext()
         
@@ -147,8 +149,49 @@ final class TrackerStore: Store {
         trackerEntity.emoji = tracker.emoji
         trackerEntity.setValue(tracker.timeTable, forKey: "schedule")
         trackerEntity.category = categoryEntity
+        trackerEntity.setValue(false, forKey: TrackerEntity.isPinned)
         
         // 3. Сохраняем
+        try saveContext()
+    }
+    
+    func fetchCategoryForTracker(trackerId: UUID) throws -> String? {
+        let context = self.context
+        let request = NSFetchRequest<NSManagedObject>(entityName: TrackerEntity.name)
+        request.predicate = NSPredicate(format: "%K == %@", TrackerEntity.trackerId, trackerId as CVarArg)
+        request.fetchLimit = 1
+        
+        guard let trackerObject = try context.fetch(request).first,
+              let category = trackerObject.value(forKey: TrackerEntity.category) as? NSManagedObject,
+              let categoryTitle = category.value(forKey: CategoryEntity.title) as? String else {
+            return nil
+        }
+        
+        return categoryTitle
+    }
+    
+    func fetchAllPinnedTrackerIds() throws -> [UUID] {
+        let context = self.context
+        let request = NSFetchRequest<NSManagedObject>(entityName: TrackerEntity.name)
+        request.predicate = NSPredicate(format: "%K == true", TrackerEntity.isPinned)
+        
+        let objects = try context.fetch(request)
+        return objects.compactMap { $0.value(forKey: TrackerEntity.trackerId) as? UUID }
+    }
+    
+    func togglePin(for trackerId: UUID) throws {
+        let context = self.context
+        let request = NSFetchRequest<NSManagedObject>(entityName: TrackerEntity.name)
+        request.predicate = NSPredicate(format: "%K == %@", TrackerEntity.trackerId, trackerId as CVarArg)
+        request.fetchLimit = 1
+        
+        guard let trackerObject = try context.fetch(request).first else {
+            throw StoreError.trackerNotFound
+        }
+        
+        let currentValue = trackerObject.value(forKey: TrackerEntity.isPinned) as? Bool ?? false
+        trackerObject.setValue(!currentValue, forKey: TrackerEntity.isPinned)
+        
         try saveContext()
     }
     
@@ -184,6 +227,9 @@ final class TrackerStore: Store {
         else if let anyValue = object.value(forKey: TrackerEntity.schedule) {
             print("⚠️ Неизвестный тип schedule: \(type(of: anyValue)) = \(anyValue)")
         }
+        
+        let isPinned = object.value(forKey: TrackerEntity.isPinned) as? Bool ?? false
+        
         return Tracker(
             id: id,
             title: title,
