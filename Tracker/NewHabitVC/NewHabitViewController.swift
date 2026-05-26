@@ -223,12 +223,12 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
     }()
     
     private lazy var completedDaysLabel: UILabel = {
-           let label = UILabel()
-           label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-           label.textColor = .appBlack
-           label.translatesAutoresizingMaskIntoConstraints = false
-           return label
-       }()
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.textColor = .appBlack
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     private var categoryButtonTopWhenErrorHidden: NSLayoutConstraint?
     private var categoryButtonTopWhenErrorVisible: NSLayoutConstraint?
@@ -257,7 +257,7 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
     private var completedDaysCount: Int = 0
     
     private let emojis: [String] = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
-    private let colors: [UIColor] = (1...18).map { UIColor(named: "appColorSelection\($0)")! }
+    private let colors: [UIColor] = (1...18).compactMap { UIColor(named: "appColorSelection\($0)") }
     
     private var selectedEmojiIndex: Int? = nil
     private var selectedColorIndex: Int? = nil
@@ -302,7 +302,6 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
         }
         
         conditionCreateButton()
-        //updateCategoryButtonTitle()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -364,19 +363,10 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
         textField.leftViewMode = .always
         
         NSLayoutConstraint.activate([
-            //            textField.heightAnchor.constraint(equalToConstant: 75),
-            //            textField.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 24),
-            //            textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            //            textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            //
             errorLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 8),
             errorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             errorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             errorLabel.heightAnchor.constraint(equalToConstant: 20),
-            //
-            //            backgroundBlockView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            //            backgroundBlockView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            //            backgroundBlockView.heightAnchor.constraint(equalToConstant: 150.5),
         ])
         
         if case .edit = mode {
@@ -466,8 +456,6 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
             categoryButtonTopWhenErrorHidden?.isActive = true
             print("🔽 Стандартный констрейнт активирован для режима создания")
         }
-        
-        //categoryButtonTopWhenErrorHidden?.isActive = true
     }
     
     

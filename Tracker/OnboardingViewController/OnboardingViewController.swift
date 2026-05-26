@@ -7,95 +7,18 @@
 
 import UIKit
 
-class OnboardingViewController: UIPageViewController {
+final class OnboardingViewController: UIPageViewController {
     // MARK: - Open Properties
-    var pages: [UIViewController] = []
-    
-    lazy var onboarding1: UIViewController = {
-        let vc = UIViewController()
-        let image1 = UIImageView(image: .onboarding1)
-        image1.translatesAutoresizingMaskIntoConstraints = false
-        
-        vc.view.addSubview(image1)
-        NSLayoutConstraint.activate([
-            image1.topAnchor.constraint(equalTo: vc.view.topAnchor),
-            image1.leadingAnchor.constraint(equalTo: vc.view.leadingAnchor),
-            image1.trailingAnchor.constraint(equalTo: vc.view.trailingAnchor),
-            image1.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor)
-        ])
-        
-        return vc
-    }()
-    
-    lazy var labelVC1: UILabel = {
-        let label = UILabel()
-        label.text = "Отслеживайте только \n то, что хотите"
-        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        label.textColor = .appBlack
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            
-        ])
-        return label
-    }()
-    
-    lazy var onboarding2: UIViewController = {
-        let vc = UIViewController()
-        let image2 = UIImageView(image: .onboarding2)
-        image2.translatesAutoresizingMaskIntoConstraints = false
-        
-        vc.view.addSubview(image2)
-        NSLayoutConstraint.activate([
-            image2.topAnchor.constraint(equalTo: vc.view.topAnchor),
-            image2.leadingAnchor.constraint(equalTo: vc.view.leadingAnchor),
-            image2.trailingAnchor.constraint(equalTo: vc.view.trailingAnchor),
-            image2.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor)
-        ])
-        return vc
-    }()
-    
-    lazy var labelVC2: UILabel = {
-        let label = UILabel()
-        label.text = "Даже если это \n не литры воды и йога"
-        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        label.textColor = .appBlack
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        return label
-    }()
+    private var pages: [UIViewController] = []
     
     lazy var pageControl: UIPageControl = {
-        
         let pageControl = UIPageControl()
-        
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
-        
         pageControl.currentPageIndicatorTintColor = .appBlack
         pageControl.pageIndicatorTintColor = .appBlack.withAlphaComponent(0.3)
-        
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         return pageControl
-    }()
-    
-    lazy var onboardingButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Вот это технологии!", for: .normal)
-        button.backgroundColor = .appBlack
-        button.setTitleColor(.ypWhite, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.layer.cornerRadius = 16
-        button.clipsToBounds = true
-        button.contentHorizontalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(onboardingButtonTapped), for: .touchUpInside)
-        
-        return button
     }()
     
     // MARK: - Initialisers
@@ -110,6 +33,7 @@ class OnboardingViewController: UIPageViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupPages()
         setupViews()
         delegate = self
         dataSource = self
@@ -120,70 +44,34 @@ class OnboardingViewController: UIPageViewController {
     }
     
     // MARK: - Private Methods
-    private func setupViews() {
-        pages.append(onboarding1)
-        pages.append(onboarding2)
-    
-        view.addSubview(onboardingButton)
-        view.addSubview(pageControl)
-        
-        onboarding1.view.addSubview(labelVC1)
-        onboarding2.view.addSubview(labelVC2)
-        
-        NSLayoutConstraint.activate([
-            onboardingButton.heightAnchor.constraint(equalToConstant: 60),
-            onboardingButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            onboardingButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            onboardingButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
-            
-            pageControl.bottomAnchor.constraint(equalTo: onboardingButton.topAnchor, constant: -24),
-            pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            labelVC1.centerXAnchor.constraint(equalTo: onboarding1.view.safeAreaLayoutGuide.centerXAnchor),
-            labelVC1.centerYAnchor.constraint(equalTo: onboarding1.view.safeAreaLayoutGuide.centerYAnchor),
-            
-            labelVC2.centerXAnchor.constraint(equalTo: onboarding2.view.safeAreaLayoutGuide.centerXAnchor),
-            labelVC2.centerYAnchor.constraint(equalTo: onboarding2.view.safeAreaLayoutGuide.centerYAnchor),
-        ])
-        
+    private func setupPages() {
+        pages = OnboardingPage.allCases.map { makePageViewController(for: $0) }
     }
     
-    @objc private func onboardingButtonTapped() {
+    private func setupViews() {
+        view.addSubview(pageControl)
         
-        UserDefaults.standard.set(true, forKey: "onboardingWasShown")
-        
-        let tabBC = TabBarController()
-        tabBC.modalPresentationStyle = .fullScreen
-        present(tabBC, animated: true)
+        NSLayoutConstraint.activate([
+            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -74),
+            pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
 }
 
 // MARK: - UIPageViewControllerDataSource
 extension OnboardingViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = pages.firstIndex(of: viewController) else {
-            return nil
-        }
+        guard let viewControllerIndex = pages.firstIndex(of: viewController) else { return nil }
         let previousIndex = viewControllerIndex - 1
-        
-        guard previousIndex >= 0 else {
-            return pages.last
-        }
-        
+        guard previousIndex >= 0 else { return pages.last }
         return pages[previousIndex]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = pages.firstIndex(of: viewController) else {
-            return nil
-        }
-        let previousIndex = viewControllerIndex + 1
-        
-        guard previousIndex < pages.count else {
-            return pages.first
-        }
-        
-        return pages[previousIndex]
+        guard let viewControllerIndex = pages.firstIndex(of: viewController) else { return nil }
+        let nextIndex = viewControllerIndex + 1
+        guard nextIndex < pages.count else { return pages.first }
+        return pages[nextIndex]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {

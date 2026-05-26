@@ -42,7 +42,7 @@ final class TrackerStoreFacade: TrackerStoreProtocol {
     }
     
     func fetchAllPinnedTrackerIds() throws -> [UUID] {
-        return try trackerStore.fetchAllPinnedTrackerIds()
+        try trackerStore.fetchAllPinnedTrackerIds()
     }
     
     func deleteTracker(id: UUID) throws {
@@ -50,7 +50,7 @@ final class TrackerStoreFacade: TrackerStoreProtocol {
     }
     
     func updateTracker(newTracker: Tracker, categoryTitle: String?) throws {
-        var categoryEntity: TrackerCategoryCoreData? = nil
+        var categoryEntity: TrackerCategoryCoreData?
         if let categoryTitle = categoryTitle {
             categoryEntity = try categoryStore.fetchCategoryCoreData(by: categoryTitle)
         }

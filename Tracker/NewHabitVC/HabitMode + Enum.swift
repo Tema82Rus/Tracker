@@ -13,30 +13,23 @@ enum HabitMode {
     
     static func == (lhs: HabitMode, rhs: HabitMode) -> Bool {
         switch (lhs, rhs) {
-        case (.create, .create):
-            return true
-        case (.edit(let lhsTracker), .edit(let rhsTracker)):
-            return lhsTracker.id == rhsTracker.id
-        default:
-            return false
+        case (.create, .create): true
+        case (.edit(let lhsTracker), .edit(let rhsTracker)): lhsTracker.id == rhsTracker.id
+        default: false
         }
     }
     
     var buttonTitle: String {
         switch self {
-        case .create:
-            return "Создать"
-        case .edit:
-            return "Сохранить"
+        case .create: "Создать"
+        case .edit: "Сохранить"
         }
     }
     
     var navigationTitle: String {
         switch self {
-        case .create:
-            return "Новая привычка"
-        case .edit:
-            return "Редактирование привычки"
+        case .create: "Новая привычка"
+        case .edit: "Редактирование привычки"
         }
     }
 }
