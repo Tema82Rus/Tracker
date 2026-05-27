@@ -15,7 +15,7 @@ final class ScheduleVC: UIViewController {
     // MARK: - Private Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Расписание"
+        label.text = NSLocalizedString("schedule.title", comment: "Schedule screen title")
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .appBlack
         label.textAlignment = .center
@@ -46,7 +46,7 @@ final class ScheduleVC: UIViewController {
         button.backgroundColor = .appBlack
         button.layer.cornerRadius = 16
         button.clipsToBounds = true
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("schedule.done.button", comment: "Done button"), for: .normal)
         button.setTitleColor(.ypWhite, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.contentHorizontalAlignment = .center

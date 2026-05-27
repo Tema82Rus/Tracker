@@ -136,7 +136,8 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         completeButton.tintColor = cellColor
         
         let word = Self.declinationOfDays(numbersOfCompletedTrackers)
-        counterLabel.text = "\(numbersOfCompletedTrackers) \(word)"
+        //counterLabel.text = "\(numbersOfCompletedTrackers) \(word)"
+        counterLabel.text = word
         
         emojiLabel.text = tracker.emoji
         titleLabel.text = tracker.title
@@ -156,25 +157,34 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     func updateCounter(_ newCount: Int) {
         completionCount = newCount
-        let word = Self.declinationOfDays(newCount)
-        counterLabel.text = "\(newCount) \(word)"
+//        let word = Self.declinationOfDays(newCount)
+//        counterLabel.text = "\(newCount) \(word)"
+        counterLabel.text = Self.declinationOfDays(newCount)
     }
     
     static func declinationOfDays(_ count: Int) -> String {
-        let lastTwoDigits = count % 100
+        let format = NSLocalizedString("days.count", comment: "Days count with plural form")
+        let result = String.localizedStringWithFormat(format, count)
         
-        if (11...14).contains(lastTwoDigits) {
-            return "Дней"
-        }
+        print("🌍 Текущая локаль: \(Locale.current.identifier)")
+        print("🔑 Сырая строка формата из bundles: '\(format)'")
+        print("✅ Итоговый результат: '\(result)'")
         
-        switch count % 10 {
-        case 1:
-            return "день"
-        case 2, 3, 4:
-            return "дня"
-        default:
-            return "дней"
-        }
+        return result
+//        let lastTwoDigits = count % 100
+//        
+//        if (11...14).contains(lastTwoDigits) {
+//            return "Дней"
+//        }
+//        
+//        switch count % 10 {
+//        case 1:
+//            return "день"
+//        case 2, 3, 4:
+//            return "дня"
+//        default:
+//            return "дней"
+//        }
     }
     
     // MARK: - Private Methods

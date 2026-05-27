@@ -25,7 +25,7 @@ final class TrackersViewController: UIViewController {
         image.heightAnchor.constraint(equalToConstant: 80).isActive = true
         
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = NSLocalizedString("trackers.placeholder.title", comment: "Placeholder text when no trackers")
         label.textColor = .appBlack
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.sizeToFit()
@@ -48,7 +48,7 @@ final class TrackersViewController: UIViewController {
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.locale = Locale.current
         datePicker.calendar.firstWeekday = 2
         datePicker.date = currentDate
         let calendar = Calendar.current
@@ -105,7 +105,6 @@ final class TrackersViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //setupTestData() трекеры для примера
         setupNavBar()
         loadInitialData()
         setupViews()
@@ -115,30 +114,6 @@ final class TrackersViewController: UIViewController {
     }
     
     // MARK: - Private Methods
-    private func createDefaultTrackers() -> [Tracker] {
-        return [
-            Tracker(
-                id: UUID(),
-                title: "Зарядка утром",
-                color: .systemGreen,
-                emoji: "🏋️‍♀️",
-                timeTable: [.monday, .wednesday, .thursday, .friday]
-            ),
-            Tracker(
-                id: UUID(),
-                title: "Поливать цветы",
-                color: .systemPink,
-                emoji: "🌸",
-                timeTable: [.monday, .friday]
-            )
-        ]
-    }
-    
-    private func setupTestData() {
-        categories = [TrackerCategory(title: "Важное", trackers: createDefaultTrackers())]
-        refreshUIForSelectedDate()
-    }
-    
     @objc private func addTrackerButtonTapped() {
         let newHabitVC = NewHabitViewController()
         newHabitVC.delegate = self
@@ -174,17 +149,6 @@ final class TrackersViewController: UIViewController {
     }
     
     private func getVisibleCategories() -> [TrackerCategory] {
-//        guard !categories.isEmpty else { return [] }
-//        
-//        var filteredCategories: [TrackerCategory] = []
-//        
-//        for category in categories {
-//            let filteredTrackers = getTrackersForToday(in: category)
-//            if !filteredTrackers.isEmpty {
-//                filteredCategories.append(TrackerCategory(title: category.title, trackers: filteredTrackers))
-//            }
-//        }
-//        return filteredCategories
         
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: currentDate)
@@ -222,7 +186,10 @@ final class TrackersViewController: UIViewController {
         // Формируем результат: сначала закрепленные, потом остальные категории
         var result: [TrackerCategory] = []
         if !pinned.isEmpty {
-            result.append(TrackerCategory(title: "Закрепленные", trackers: pinned))
+            result.append(TrackerCategory(
+                title: NSLocalizedString("pinned.section", comment: "Pinned trackers"),
+                trackers: pinned)
+            )
         }
         result.append(contentsOf: regularCategories)
         
@@ -313,13 +280,13 @@ final class TrackersViewController: UIViewController {
         search.obscuresBackgroundDuringPresentation = false
         search.hidesNavigationBarDuringPresentation = false
         search.automaticallyShowsCancelButton = true
-        search.searchBar.placeholder = "Поиск"
+        search.searchBar.placeholder = NSLocalizedString("trackers.search.placeholder", comment: "Search placeholder")
         navigationItem.searchController = search
         definesPresentationContext = true
         search.searchBar.delegate = self
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: plusButton)
-        navigationItem.title = "Трекеры"
+        navigationItem.title = NSLocalizedString("trackers.title", comment: "Title for trackers screen")
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.rightBarButtonItem = datePickerButton
@@ -465,7 +432,6 @@ extension TrackersViewController: UICollectionViewDataSource {
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let header = SupplementaryView(frame: .zero)
-        header.setupHeader(title: "Домашний уют")
         return header.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
                                                      height: UIView.layoutFittingCompressedSize.height)
         )
@@ -534,7 +500,9 @@ extension TrackersViewController {
         return UIContextMenuConfiguration(actionProvider: { _ in
             
             // 👇 Пункт "Закрепить/Открепить"
-            let pinTitle = isPinned ? "Открепить" : "Закрепить"
+            let pinTitle = isPinned 
+            ? NSLocalizedString("tracker.unpin", comment: "Unpin tracker")
+            : NSLocalizedString("tracker.pin", comment: "Pin tracker")
             let pinImage = isPinned ? "pin.slash" : "pin"
             
             let pinAction = UIAction(
@@ -546,7 +514,7 @@ extension TrackersViewController {
             
             // 👇 Пункт "Редактировать"
             let editAction = UIAction(
-                title: "Редактировать",
+                title: NSLocalizedString("common.edit", comment: "Edit"),
                 image: UIImage(systemName: "pencil")
             ) { [weak self] _ in
                 self?.editTracker(tracker)
@@ -554,7 +522,7 @@ extension TrackersViewController {
             
             // 👇 Пункт "Удалить"
             let deleteAction = UIAction(
-                title: "Удалить",
+                title: NSLocalizedString("common.delete", comment: "Delete"),
                 image: UIImage(systemName: "trash"),
                 attributes: .destructive
             ) { [weak self] _ in
@@ -581,13 +549,13 @@ extension TrackersViewController {
             
         } catch {
             print("❌ Ошибка при закреплении: \(error)")
-            showErrorAlert("Не удалось изменить статус закрепления")
+            showErrorAlert(NSLocalizedString("error.pin", comment: "Pin error message"))
         }
     }
     
     private func editTracker(_ tracker: Tracker) {
         print("✏️ Редактирование трекера: \(tracker.title)")
-        print("📅 Расписание трекера: \(tracker.timeTable.map { $0.rawValue })") // 👈 Отладка
+        print("📅 Расписание трекера: \(tracker.timeTable.map { $0.rawValue })")
         
         let completedDaysCount = (try? recordStore.countRecords(for: tracker.id)) ?? 0
         print("📊 Количество выполненных дней: \(completedDaysCount)")
@@ -616,22 +584,28 @@ extension TrackersViewController {
             print(" Успешное обновление трекера")
         } catch {
             print("❌ Ошибка при обновлении: \(error)")
-            showErrorAlert("Не удалось обновить трекер")
+            showErrorAlert(NSLocalizedString("error.update", comment: "Update error message"))
         }
     }
     
     private func showDeleteConfirmation(for tracker: Tracker) {
         let alert = UIAlertController(
-            title: "Удалить трекер?",
+            title: NSLocalizedString("delete.title", comment: "Delete confirmation title"),
             message: nil,
             preferredStyle: .actionSheet
         )
         
-        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let deleteAction = UIAlertAction(
+            title: NSLocalizedString("common.delete", comment: "Delete"),
+            style: .destructive
+        ) { [weak self] _ in
             self?.deleteTracker(tracker)
         }
         
-        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+        let cancelAction = UIAlertAction(
+            title: NSLocalizedString("common.cancel", comment: "Cancel"),
+            style: .cancel
+        )
         
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
@@ -645,7 +619,7 @@ extension TrackersViewController {
             loadInitialData()
         } catch {
             print("❌ Ошибка при удалении: \(error)")
-            showErrorAlert("Не удалось удалить трекер")
+            showErrorAlert(NSLocalizedString("error.delete", comment: "Delete error message"))
         }
     }
     
@@ -655,7 +629,10 @@ extension TrackersViewController {
             message: message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("common.ok", comment: "OK"),
+            style: .default)
+        )
         present(alert, animated: true)
     }
 }

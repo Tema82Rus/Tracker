@@ -21,15 +21,15 @@ enum HabitMode {
     
     var buttonTitle: String {
         switch self {
-        case .create: "Создать"
-        case .edit: "Сохранить"
+        case .create: NSLocalizedString("newhabit.create.button", comment: "Create button")
+        case .edit: NSLocalizedString("newhabit.save.button", comment: "Save button")
         }
     }
     
     var navigationTitle: String {
         switch self {
-        case .create: "Новая привычка"
-        case .edit: "Редактирование привычки"
+        case .create: NSLocalizedString("newhabit.title", comment: "Title for new habit screen")
+        case .edit: NSLocalizedString("newhabit.edit.title", comment: "Title for edit habit screen")
         }
     }
 }
