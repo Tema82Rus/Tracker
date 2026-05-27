@@ -619,7 +619,7 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
         
         if completedDaysCount > 0 {
             let word = TrackersCollectionViewCell.declinationOfDays(completedDaysCount)
-            completedDaysLabel.text = "\(completedDaysCount) \(word)"
+            completedDaysLabel.text = word
             print("✅ Отображаем дни: \(completedDaysCount) \(word)")
         } else {
             print("⚠️ completedDaysCount = 0, ничего не отображаем")

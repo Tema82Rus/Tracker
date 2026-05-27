@@ -136,7 +136,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         completeButton.tintColor = cellColor
         
         let word = Self.declinationOfDays(numbersOfCompletedTrackers)
-        //counterLabel.text = "\(numbersOfCompletedTrackers) \(word)"
         counterLabel.text = word
         
         emojiLabel.text = tracker.emoji
@@ -157,8 +156,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     func updateCounter(_ newCount: Int) {
         completionCount = newCount
-//        let word = Self.declinationOfDays(newCount)
-//        counterLabel.text = "\(newCount) \(word)"
         counterLabel.text = Self.declinationOfDays(newCount)
     }
     
