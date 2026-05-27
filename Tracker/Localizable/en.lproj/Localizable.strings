@@ -132,5 +132,5 @@
 // MARK: - OnboardingViewController
 
 "onboarding.first.page" = "Track only\nwhat you want";
-"onboarding.second.page" = "Even if it is\nnot liters of water and yoga";
+"onboarding.second.page" = "Even if it is\nnot liters of water\nand yoga";
 "onboarding.button" = "These are the technologies!";
