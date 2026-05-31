@@ -241,6 +241,10 @@ final class TrackersViewController: UIViewController {
     }
     
     private func getVisibleCategories() -> [TrackerCategory] {
+        if isSearchActive {
+            /// При поиске используем уже отфильтрованные visibleCategories
+            return visibleCategories
+        }
         
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: currentDate)
@@ -265,7 +269,6 @@ final class TrackersViewController: UIViewController {
             filteredTrackers = allTodayTrackers.filter { tracker in
                 isCompleted(trackerId: tracker.id, on: currentDate)
             }
-            
         case .uncompleted:
             filteredTrackers = allTodayTrackers.filter { tracker in
                 !isCompleted(trackerId: tracker.id, on: currentDate)
@@ -394,6 +397,7 @@ final class TrackersViewController: UIViewController {
         
         let shouldShowMainPlaceholder = !hasAnyTrackersInDB ||
         (!hasTrackersForSelectedDay) ||
+        (isSearchActive && visibleCategories.isEmpty) ||
         (!currentFilter.isStrictFilter && !hasVisibleTrackers)
         
         placeholderView.isHidden = !shouldShowMainPlaceholder
@@ -528,12 +532,9 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let visibleCategories = getVisibleCategories()
         guard section < visibleCategories.count else { return 0 }
-        
         let category = visibleCategories[section]
-        let trackersForToday = getTrackersForToday(in: category)
-        return trackersForToday.count
+        return category.trackers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -544,7 +545,6 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         cell.delegate = self
         
-        let visibleCategories = getVisibleCategories()
         guard indexPath.section < visibleCategories.count,
               indexPath.item < visibleCategories[indexPath.section].trackers.count else { return cell }
         
@@ -593,7 +593,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             assertionFailure("Failed to dequeue supplementary view of kind: \(kind) with identifier: \(id)")
             return UICollectionReusableView()
         }
-        header.setupHeader(title: visibleCategories[indexPath.section].title)
+        header.setupHeader(title: getVisibleCategories()[indexPath.section].title)
         return header
     }
 }
@@ -670,9 +670,13 @@ extension TrackersViewController: UISearchResultsUpdating {
 // MARK: - SearchServiceDelegate
 extension TrackersViewController: SearchServiceDelegate {
     func didUpdateSearchResults(_ filteredCategories: [TrackerCategory]) {
-        visibleCategories = filteredCategories
-        trackersCollectionView.reloadData()
-        updatePlaceholderVisibility()
+        DispatchQueue.main.async {
+            print("🔎 Search results: \(filteredCategories.count) categories")
+            self.visibleCategories = filteredCategories
+            print("🔎 visibleCategories updated: \(self.visibleCategories.count)")
+            self.trackersCollectionView.reloadData()
+            self.updatePlaceholderVisibility()
+        }
     }
 }
 
