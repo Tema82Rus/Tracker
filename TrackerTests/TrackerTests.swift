@@ -21,8 +21,34 @@ final class TrackersVCSnapshotTests: XCTestCase {
         assertSnapshot(
             of: vc,
             as: .image,
-            named: "mainScreen",
-            record: false
+        )
+    }
+    
+    func testTrackerVCMainLightTheme() throws {
+        let vc = TabBarController()
+
+        _ = vc.view
+        vc.view.setNeedsLayout()
+        vc.view.layoutIfNeeded()
+        waitForAsyncOperations()
+        
+        assertSnapshot(
+            of: vc,
+            as: .image(traits: .init(userInterfaceStyle: .light))
+        )
+    }
+    
+    func testTrackerVCMainDarkTheme() throws {
+        let vc = TabBarController()
+
+        _ = vc.view
+        vc.view.setNeedsLayout()
+        vc.view.layoutIfNeeded()
+        waitForAsyncOperations()
+        
+        assertSnapshot(
+            of: vc,
+            as: .image(traits: .init(userInterfaceStyle: .dark))
         )
     }
     
