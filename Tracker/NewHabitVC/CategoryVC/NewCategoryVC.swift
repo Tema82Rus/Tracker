@@ -19,7 +19,7 @@ final class NewCategoryViewController: UIViewController {
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.borderStyle = .none
         textField.layer.cornerRadius = 16
-        textField.backgroundColor = .backgroundDay
+        textField.backgroundColor = .appBackground
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
@@ -34,7 +34,7 @@ final class NewCategoryViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString("newcategory.done.button", comment: "Done button"), for: .normal)
         button.backgroundColor = .appGray
-        button.setTitleColor(.ypWhite, for: .normal)
+        button.setTitleColor(.appWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.isEnabled = false
@@ -54,7 +54,7 @@ final class NewCategoryViewController: UIViewController {
     // MARK: - Setup UI
     private func setupUI() {
         title = NSLocalizedString("newcategory.title", comment: "New category screen title")
-        view.backgroundColor = .ypWhite
+        view.backgroundColor = .appWhite
         
         view.addSubview(textField)
         view.addSubview(doneButton)

@@ -57,7 +57,7 @@ extension OnboardingViewController {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
         button.backgroundColor = .appBlack
-        button.setTitleColor(.ypWhite, for: .normal)
+        button.setTitleColor(.appWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.clipsToBounds = true

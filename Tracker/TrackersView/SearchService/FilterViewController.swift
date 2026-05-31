@@ -25,7 +25,7 @@ final class FilterViewController: UIViewController {
         table.backgroundColor = .clear
         table.separatorStyle = .none
         table.isScrollEnabled = false
-        table.backgroundColor = .backgroundDay
+        table.backgroundColor = .appBackground
         return table
     }()
     
@@ -40,7 +40,7 @@ final class FilterViewController: UIViewController {
     
     private lazy var container: UIView = {
         let container = UIView()
-        container.backgroundColor = .backgroundDay
+        container.backgroundColor = .appBackground
         container.layer.cornerRadius = 16
         container.clipsToBounds = true
         container.translatesAutoresizingMaskIntoConstraints = false
@@ -58,7 +58,7 @@ final class FilterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .ypWhite
+        view.backgroundColor = .appWhite
         setupUI()
     }
     

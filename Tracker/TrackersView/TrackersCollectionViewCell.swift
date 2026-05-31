@@ -18,7 +18,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     // MARK: - Private Properties
     private lazy var emojiLabelBackgroundView: UILabel = {
         let label = UILabel()
-        label.backgroundColor = UIColor.backgroundDay
+        label.backgroundColor = .appBackground
         label.layer.cornerRadius = 12
         label.clipsToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -37,7 +37,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let title = UILabel()
         title.font = .systemFont(ofSize: 12, weight: .medium)
-        title.textColor = .ypWhite
+        title.textColor = .appWhite
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
     }()
@@ -76,7 +76,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private lazy var pinImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "pin.fill")
-        imageView.tintColor = .ypWhite
+        imageView.tintColor = .appWhite
         imageView.isHidden = true
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false

@@ -27,7 +27,7 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
     
     private lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.backgroundColor = .backgroundDay
+        textField.backgroundColor = .appBackground
         textField.borderStyle = .none
         textField.layer.cornerRadius = 16
         textField.clipsToBounds = true
@@ -149,7 +149,7 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
     
     private lazy var backgroundBlockView: UIView = {
         let view = UIView()
-        view.backgroundColor = .backgroundDay
+        view.backgroundColor = .appBackground
         view.layer.cornerRadius = 16
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -198,7 +198,7 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
         case .edit:
             button.setTitle(NSLocalizedString("newhabit.save.button", comment: "Save"), for: .normal)
         }
-        button.setTitleColor(.ypWhite, for: .normal)
+        button.setTitleColor(.appWhite, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.contentHorizontalAlignment = .center
         button.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
@@ -208,7 +208,7 @@ final class NewHabitViewController: UIViewController, UITextFieldDelegate {
     
     private lazy var cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .ypWhite
+        button.backgroundColor = .appWhite
         button.layer.cornerRadius = 16
         button.layer.borderColor = UIColor.appRed.cgColor
         button.layer.borderWidth = 1.0

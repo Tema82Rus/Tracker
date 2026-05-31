@@ -33,7 +33,7 @@ final class CategoryViewController: UIViewController {
     
     private lazy var tableViewContainer: UIView = {
         let view = UIView()
-        view.backgroundColor = .backgroundDay
+        view.backgroundColor = .appBackground
         view.layer.cornerRadius = 16
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -79,7 +79,7 @@ final class CategoryViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString("category.add.button", comment: "Add category button"), for: .normal)
         button.backgroundColor = .appBlack
-        button.setTitleColor(.ypWhite, for: .normal)
+        button.setTitleColor(.appWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -110,7 +110,7 @@ final class CategoryViewController: UIViewController {
     // MARK: - Setup
     private func setupUI() {
         title = NSLocalizedString("category.title", comment: "Category screen title")
-        view.backgroundColor = .ypWhite
+        view.backgroundColor = .appWhite
         
         view.addSubview(tableView)
         view.addSubview(placeholderView)
