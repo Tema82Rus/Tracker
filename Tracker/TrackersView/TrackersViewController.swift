@@ -373,8 +373,6 @@ final class TrackersViewController: UIViewController {
             updatePlaceholderVisibility()
             updateFilterButtonVisibility()
             
-//            visibleCategories = categories
-//            refreshUIForSelectedDate()
         } catch {
             print("Ошибка загрузки данных: \(error)")
         }
