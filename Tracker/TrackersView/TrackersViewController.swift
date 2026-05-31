@@ -385,6 +385,8 @@ final class TrackersViewController: UIViewController {
     private func updatePlaceholderVisibility() {
         let hasAnyTrackersInDB = !categories.flatMap { $0.trackers }.isEmpty
         let weekday = Calendar.current.component(.weekday, from: currentDate)
+        
+        /// Считаем трекеры на выбранный день из исходных данных
         var trackersCountForDay = 0
         for category in categories {
             trackersCountForDay += category.trackers.filter {
@@ -392,24 +394,36 @@ final class TrackersViewController: UIViewController {
             }.count
         }
         let hasTrackersForSelectedDay = trackersCountForDay > 0
+
+        /// Считаем видимые трекеры в текущем состоянии (с учётом фильтра и поиска)
         let totalVisibleTrackers = visibleCategories.reduce(0) { $0 + $1.trackers.count }
         let hasVisibleTrackers = totalVisibleTrackers > 0
-        
-        let shouldShowMainPlaceholder = !hasAnyTrackersInDB ||
-        (!hasTrackersForSelectedDay) ||
-        (isSearchActive && visibleCategories.isEmpty) ||
-        (!currentFilter.isStrictFilter && !hasVisibleTrackers)
-        
+
+        /// 🔑 Чёткое разделение сценариев:
+        let shouldShowMainPlaceholder: Bool
+        let shouldShowFilterPlaceholder: Bool
+
+        if isSearchActive {
+            /// При активном поиске:
+            /// - если visibleCategories пуст → показываем emptyFilterPlaceholderView
+            /// - в остальных случаях скрываем оба placeholder'а (данные есть)
+            shouldShowMainPlaceholder = false
+            shouldShowFilterPlaceholder = visibleCategories.isEmpty
+        } else {
+            /// В обычном режиме (без поиска):
+            /// - main placeholder: нет трекеров в БД ИЛИ нет трекеров на день
+            /// - filter placeholder: есть трекеры на день, но фильтр их скрыл
+            shouldShowMainPlaceholder = !hasAnyTrackersInDB || !hasTrackersForSelectedDay
+            shouldShowFilterPlaceholder = hasTrackersForSelectedDay &&
+                                       currentFilter.isStrictFilter &&
+                                       !hasVisibleTrackers
+        }
+
         placeholderView.isHidden = !shouldShowMainPlaceholder
-        
-        let shouldShowFilterPlaceholder = hasTrackersForSelectedDay &&
-        currentFilter.isStrictFilter &&
-        !hasVisibleTrackers
-        
         emptyFilterPlaceholderView.isHidden = !shouldShowFilterPlaceholder
         filterButton.isHidden = !hasTrackersForSelectedDay
     }
-    
+
     private func setupViews() {
         view.addSubview(placeholderView)
         view.addSubview(trackersCollectionView)
