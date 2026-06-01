@@ -30,6 +30,30 @@ final class NewCategoryViewController: UIViewController {
         return textField
     }()
     
+    private lazy var toolbar: UIToolbar = {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        let cancelButton = UIBarButtonItem(
+            title: NSLocalizedString("common.done", comment: "Done"),
+            style: .plain,
+            target: self,
+            action: #selector(cancelButtonTapped)
+        )
+        
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        let saveButton = UIBarButtonItem(
+            title: NSLocalizedString("newhabit.save.button", comment: "Save"),
+            style: .done,
+            target: self,
+            action: #selector(saveButtonTapped)
+        )
+        
+        toolbar.items = [cancelButton, flexibleSpace, saveButton]
+        return toolbar
+    }()
+    
     private lazy var doneButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString("newcategory.done.button", comment: "Done button"), for: .normal)
@@ -47,6 +71,7 @@ final class NewCategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupTextField()
         
         navigationItem.hidesBackButton = true
     }
@@ -70,6 +95,26 @@ final class NewCategoryViewController: UIViewController {
             doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             doneButton.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    private func setupTextField() {
+        textField.inputAccessoryView = toolbar
+    }
+    
+    @objc private func cancelButtonTapped() {
+        textField.resignFirstResponder()
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func saveButtonTapped() {
+        saveCategory()
+    }
+    
+    private func saveCategory() {
+        guard let categoryName = textField.text, !categoryName.isEmpty else { return }
+        onCategoryCreated?(categoryName)
+        textField.resignFirstResponder()
+        navigationController?.popViewController(animated: true)
     }
     
     // MARK: - Actions
