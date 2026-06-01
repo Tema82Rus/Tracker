@@ -27,7 +27,7 @@ extension OnboardingViewController {
         let label = UILabel()
         label.text = page.title
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        label.textColor = .appBlack
+        label.textColor = .black
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -56,8 +56,8 @@ extension OnboardingViewController {
     private func makeOnboardingButton(withTitle title: String) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
-        button.backgroundColor = .appBlack
-        button.setTitleColor(.appWhite, for: .normal)
+        button.backgroundColor = .black
+        button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.clipsToBounds = true
