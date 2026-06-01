@@ -24,7 +24,7 @@ final class TabBarController: UITabBarController {
         let store = AppDependencies.shared.makeTrackerStore()
         let recordStore = AppDependencies.shared.makeRecordStore()
         let trackersVC = TrackersViewController(store: store, recordStore: recordStore)
-        let statisticsVC = StatisticsViewController()
+        let statisticsVC = StatisticsViewController(recordStore: recordStore)
         
         trackersVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("tabbar.trackers", comment: "Trackers tab"),

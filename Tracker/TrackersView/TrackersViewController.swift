@@ -451,6 +451,7 @@ final class TrackersViewController: UIViewController {
     }
 
     private func setupViews() {
+        view.backgroundColor = .appWhite
         view.addSubview(placeholderView)
         view.addSubview(trackersCollectionView)
         view.addSubview(emptyFilterPlaceholderView)
@@ -909,6 +910,7 @@ extension TrackersViewController {
     private func deleteTracker(_ tracker: Tracker) {
         do {
             try store.deleteTracker(id: tracker.id)
+            NotificationCenter.default.post(name: .trackerRecordsDidUpdate, object: nil)
             loadInitialData()
         } catch {
             print("❌ Ошибка при удалении: \(error)")
