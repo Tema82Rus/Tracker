@@ -185,10 +185,29 @@ final class TrackersViewController: UIViewController {
         
         trackersCollectionView.dataSource = self
         trackersCollectionView.delegate = self
+        
+        AnalyticsService.report(
+            event: .open,
+            params: [
+                .screen: .main
+            ]
+        )
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        AnalyticsService.report(event: .close, params: [.screen: .main])
     }
     
     // MARK: - Selector Methods
     @objc private func addTrackerButtonTapped() {
+        AnalyticsService.report(
+            event: .click,
+            params: [
+                .screen: .main,
+                .item: .add_track
+            ]
+        )
         let newHabitVC = NewHabitViewController()
         newHabitVC.delegate = self
         let navHabitVC = UINavigationController(rootViewController: newHabitVC)
@@ -215,6 +234,13 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func filterButtonTapped() {
+        AnalyticsService.report(
+            event: .click,
+            params: [
+                .screen: .main,
+                    .item: .filter
+            ]
+        )
         let filterVC = FilterViewController(currentFilter: currentFilter)
         filterVC.delegate = self
         
@@ -626,6 +652,14 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - TrackerCellDelegate
 extension TrackersViewController: TrackerCellDelegate {
     func addOrRemoveCompletionTracker(for tracker: Tracker, isCompletedInCell: Bool) {
+        AnalyticsService.report(
+            event: .click,
+            params: [
+                .screen: .main,
+                    .item: .track
+            ]
+        )
+        
         print("🔘 Нажатие на трекер '\(tracker.title)")
         let today = Calendar.current.startOfDay(for: self.currentDate)
         
@@ -760,6 +794,14 @@ extension TrackersViewController {
                 title: NSLocalizedString("common.edit", comment: "Edit"),
                 image: UIImage(systemName: "pencil")
             ) { [weak self] _ in
+                AnalyticsService.report(
+                    event: .click,
+                    params: [
+                        .screen: .main,
+                        .item: .edit
+                    ]
+                )
+                
                 self?.editTracker(tracker)
             }
             
@@ -769,6 +811,14 @@ extension TrackersViewController {
                 image: UIImage(systemName: "trash"),
                 attributes: .destructive
             ) { [weak self] _ in
+                AnalyticsService.report(
+                    event: .click,
+                    params: [
+                        .screen: .main,
+                        .item: .delete
+                    ]
+                )
+                
                 self?.showDeleteConfirmation(for: tracker)
             }
             

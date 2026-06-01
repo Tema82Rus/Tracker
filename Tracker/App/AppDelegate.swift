@@ -42,6 +42,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, ManagedObjectContex
     // MARK: - Public Methods
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         CoreDataTransformers.register()
+        AnalyticsService.setupAnalyticsService()
         print("✅ Трансформеры зарегистрированы")
         return true
     }
