@@ -13,8 +13,8 @@ enum Section: Int, CaseIterable {
     
     var title: String {
         switch self {
-        case .emoji: return NSLocalizedString("newhabit.emoji.section", comment: "Emoji section")
-        case .color: return NSLocalizedString("newhabit.color.section", comment: "Color section")
+        case .emoji: NSLocalizedString("newhabit.emoji.section", comment: "Emoji section")
+        case .color: NSLocalizedString("newhabit.color.section", comment: "Color section")
         }
     }
 }

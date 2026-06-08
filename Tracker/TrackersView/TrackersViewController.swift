@@ -205,7 +205,7 @@ final class TrackersViewController: UIViewController {
             event: .click,
             params: [
                 .screen: .main,
-                .item: .add_track
+                .item: .addTrack
             ]
         )
         let newHabitVC = NewHabitViewController()

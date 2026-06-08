@@ -295,14 +295,28 @@ extension StatisticsViewController {
     
     private func calculatePerfectDays(records: [TrackerRecord]) -> Int {
         guard records.count > 0 else { return 0 }
+    
+        guard let allTrackers = try? recordStore.fetchAllRecords() else { return 0 }
+        let totalTrackerCount = allTrackers.count
+        if totalTrackerCount == 0 { return 0 }
         
-        var uniqueDates = Set<Date>()
-        for record in records {
-            uniqueDates.insert(Calendar.current.startOfDay(for: record.date))
+        let groupedByDay = Dictionary(grouping: records) { record in
+            Calendar.current.startOfDay(for: record.date)
         }
         
-        return uniqueDates.count
+        var perfectDaysCount = 0
+        
+        for (day, dayRecords) in groupedByDay {
+            let completedTrackerIds = Set(dayRecords.map { $0.id })
+            
+            if completedTrackerIds.count == totalTrackerCount {
+                perfectDaysCount += 1
+            }
+        }
+        
+        return perfectDaysCount
     }
+
     
     private func calculateCompletedTrackersCount(records: [TrackerRecord]) -> Int {
         return records.count

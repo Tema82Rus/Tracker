@@ -120,8 +120,6 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
             self.dismiss(animated: true)
         })
-        
-//        dismiss(animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

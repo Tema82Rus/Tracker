@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 protocol SearchServiceDelegate: AnyObject {
     func didUpdateSearchResults(_ filteredCategories: [TrackerCategory])

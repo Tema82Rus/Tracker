@@ -9,7 +9,7 @@ import Foundation
 import AppMetricaCore
 
 struct AnalyticsService {
-    enum screenEvent: String {
+    enum ScreenEvent: String {
         case open
         case close
         case click
@@ -22,7 +22,7 @@ struct AnalyticsService {
     
     enum ParamsValue: String {
         case main
-        case add_track
+        case addTrack
         case filter
         case edit
         case delete
@@ -41,7 +41,7 @@ struct AnalyticsService {
         print("AppMetrica успешно инициализирована")
     }
     
-    static func report(event: screenEvent, params: [ParamsKey: ParamsValue] = [:]) {
+    static func report(event: ScreenEvent, params: [ParamsKey: ParamsValue] = [:]) {
         let serializedParams = params.reduce(into: [String: String]()) { acc, pair in
             acc[pair.key.rawValue] = pair.value.rawValue
         }
