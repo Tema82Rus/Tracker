@@ -20,10 +20,10 @@ enum OnboardingPage: CaseIterable {
     
     var title: String {
         switch self {
-        case .first: return "Отслеживайте только \n то, что хотите"
-        case .second: return "Даже если это \n не литры воды и йога"
+        case .first: return NSLocalizedString("onboarding.first.page", comment: "Track only\nwhat you want")
+        case .second: return NSLocalizedString("onboarding.second.page", comment: "Even if it is\nnot liters of water and yoga")
         }
     }
     
-    var buttonTitle: String { "Вот это технологии!" }
+    var buttonTitle: String { NSLocalizedString("onboarding.button", comment: "These are the technologies!") }
 }

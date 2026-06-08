@@ -15,11 +15,11 @@ final class NewCategoryViewController: UIViewController {
     // MARK: - UI Elements
     private lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("newcategory.textfield.placeholder", comment: "Enter category name placeholder")
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.borderStyle = .none
         textField.layer.cornerRadius = 16
-        textField.backgroundColor = .backgroundDay
+        textField.backgroundColor = .appBackground
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
@@ -30,11 +30,35 @@ final class NewCategoryViewController: UIViewController {
         return textField
     }()
     
+    private lazy var toolbar: UIToolbar = {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        let cancelButton = UIBarButtonItem(
+            title: NSLocalizedString("common.done", comment: "Done"),
+            style: .plain,
+            target: self,
+            action: #selector(cancelButtonTapped)
+        )
+        
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        let saveButton = UIBarButtonItem(
+            title: NSLocalizedString("newhabit.save.button", comment: "Save"),
+            style: .done,
+            target: self,
+            action: #selector(saveButtonTapped)
+        )
+        
+        toolbar.items = [cancelButton, flexibleSpace, saveButton]
+        return toolbar
+    }()
+    
     private lazy var doneButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("newcategory.done.button", comment: "Done button"), for: .normal)
         button.backgroundColor = .appGray
-        button.setTitleColor(.ypWhite, for: .normal)
+        button.setTitleColor(.appWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.isEnabled = false
@@ -47,14 +71,15 @@ final class NewCategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupTextField()
         
         navigationItem.hidesBackButton = true
     }
     
     // MARK: - Setup UI
     private func setupUI() {
-        title = "Новая категория"
-        view.backgroundColor = .ypWhite
+        title = NSLocalizedString("newcategory.title", comment: "New category screen title")
+        view.backgroundColor = .appWhite
         
         view.addSubview(textField)
         view.addSubview(doneButton)
@@ -70,6 +95,26 @@ final class NewCategoryViewController: UIViewController {
             doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             doneButton.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    private func setupTextField() {
+        textField.inputAccessoryView = toolbar
+    }
+    
+    @objc private func cancelButtonTapped() {
+        textField.resignFirstResponder()
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func saveButtonTapped() {
+        saveCategory()
+    }
+    
+    private func saveCategory() {
+        guard let categoryName = textField.text, !categoryName.isEmpty else { return }
+        onCategoryCreated?(categoryName)
+        textField.resignFirstResponder()
+        navigationController?.popViewController(animated: true)
     }
     
     // MARK: - Actions

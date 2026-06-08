@@ -51,7 +51,7 @@ final class CategoryCell: UITableViewCell {
     private func setupUI() {
         
         backgroundColor = .clear
-        contentView.backgroundColor = .backgroundDay
+        contentView.backgroundColor = .appBackground
         selectionStyle = .none
         
         contentView.addSubview(titleLabel)

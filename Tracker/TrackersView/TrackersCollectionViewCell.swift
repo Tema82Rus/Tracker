@@ -18,7 +18,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     // MARK: - Private Properties
     private lazy var emojiLabelBackgroundView: UILabel = {
         let label = UILabel()
-        label.backgroundColor = UIColor.backgroundDay
+        label.backgroundColor = .appBackground
         label.layer.cornerRadius = 12
         label.clipsToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -37,7 +37,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let title = UILabel()
         title.font = .systemFont(ofSize: 12, weight: .medium)
-        title.textColor = .ypWhite
+        title.textColor = .appWhite
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
     }()
@@ -76,7 +76,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private lazy var pinImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "pin.fill")
-        imageView.tintColor = .ypWhite
+        imageView.tintColor = .appWhite
         imageView.isHidden = true
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -136,7 +136,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         completeButton.tintColor = cellColor
         
         let word = Self.declinationOfDays(numbersOfCompletedTrackers)
-        counterLabel.text = "\(numbersOfCompletedTrackers) \(word)"
+        counterLabel.text = word
         
         emojiLabel.text = tracker.emoji
         titleLabel.text = tracker.title
@@ -156,25 +156,32 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     func updateCounter(_ newCount: Int) {
         completionCount = newCount
-        let word = Self.declinationOfDays(newCount)
-        counterLabel.text = "\(newCount) \(word)"
+        counterLabel.text = Self.declinationOfDays(newCount)
     }
     
     static func declinationOfDays(_ count: Int) -> String {
-        let lastTwoDigits = count % 100
+        let format = NSLocalizedString("days.count", comment: "Days count with plural form")
+        let result = String.localizedStringWithFormat(format, count)
         
-        if (11...14).contains(lastTwoDigits) {
-            return "Дней"
-        }
+        print("🌍 Текущая локаль: \(Locale.current.identifier)")
+        print("🔑 Сырая строка формата из bundles: '\(format)'")
+        print("✅ Итоговый результат: '\(result)'")
         
-        switch count % 10 {
-        case 1:
-            return "день"
-        case 2, 3, 4:
-            return "дня"
-        default:
-            return "дней"
-        }
+        return result
+//        let lastTwoDigits = count % 100
+//        
+//        if (11...14).contains(lastTwoDigits) {
+//            return "Дней"
+//        }
+//        
+//        switch count % 10 {
+//        case 1:
+//            return "день"
+//        case 2, 3, 4:
+//            return "дня"
+//        default:
+//            return "дней"
+//        }
     }
     
     // MARK: - Private Methods

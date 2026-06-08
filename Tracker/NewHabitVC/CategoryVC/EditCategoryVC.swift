@@ -16,11 +16,11 @@ final class EditCategoryViewController: UIViewController {
     // MARK: - UI Elements
     private lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("editcategory.textfield.placeholder", comment: "Enter category name placeholder")
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.borderStyle = .none
         textField.layer.cornerRadius = 16
-        textField.backgroundColor = .backgroundDay
+        textField.backgroundColor = .appBackground
         textField.translatesAutoresizingMaskIntoConstraints = false
         
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
@@ -32,9 +32,9 @@ final class EditCategoryViewController: UIViewController {
     
     private lazy var doneButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("editcategory.done.button", comment: "Done button"), for: .normal)
         button.backgroundColor = .appBlack
-        button.setTitleColor(.ypWhite, for: .normal)
+        button.setTitleColor(.appWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.isEnabled = true
@@ -63,8 +63,8 @@ final class EditCategoryViewController: UIViewController {
     
     // MARK: - Setup UI
     private func setupUI() {
-        title = "Редактирование категории"
-        view.backgroundColor = .ypWhite
+        title = NSLocalizedString("editcategory.title", comment: "Edit category screen title")
+        view.backgroundColor = .appWhite
         
         view.addSubview(textField)
         view.addSubview(doneButton)

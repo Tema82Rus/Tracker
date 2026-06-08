@@ -15,7 +15,7 @@ final class ScheduleVC: UIViewController {
     // MARK: - Private Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Расписание"
+        label.text = NSLocalizedString("schedule.title", comment: "Schedule screen title")
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .appBlack
         label.textAlignment = .center
@@ -25,7 +25,7 @@ final class ScheduleVC: UIViewController {
     
     private lazy var tableViewBackground: UIView = {
         let view = UIView()
-        view.backgroundColor = .backgroundDay
+        view.backgroundColor = .appBackground
         view.layer.cornerRadius = 16
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -46,8 +46,8 @@ final class ScheduleVC: UIViewController {
         button.backgroundColor = .appBlack
         button.layer.cornerRadius = 16
         button.clipsToBounds = true
-        button.setTitle("Готово", for: .normal)
-        button.setTitleColor(.ypWhite, for: .normal)
+        button.setTitle(NSLocalizedString("schedule.done.button", comment: "Done button"), for: .normal)
+        button.setTitleColor(.appWhite, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.contentHorizontalAlignment = .center
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -58,7 +58,7 @@ final class ScheduleVC: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .ypWhite
+        view.backgroundColor = .appWhite
         navigationItem.titleView = titleLabel
         navigationItem.hidesBackButton = true
         tableView.dataSource = self
