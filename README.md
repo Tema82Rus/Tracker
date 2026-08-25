@@ -10,6 +10,22 @@ https://github.com/user-attachments/assets/9a57d4dc-16d1-43df-8744-a519d5c051ef
 
 ## Скриншоты
 
+| Онбординг | Пустой главный экран | Создание трекера |
+|:---------:|:--------------------:|:----------------:|
+| <img src="Tracker/Resources/Screenshots/onboardingFirstScreen.png" width="230"> | <img src="Tracker/Resources/Screenshots/trackerEmtyState.png" width="230"> | <img src="Tracker/Resources/Screenshots/trackerCreation.png" width="230"> |
+
+| Пустой список категорий | Выбор категории | Настройка расписания |
+|:-----------------------:|:---------------:|:--------------------:|
+| <img src="Tracker/Resources/Screenshots/categoryEmptyState.png" width="230"> | <img src="Tracker/Resources/Screenshots/categorySelection.png" width="230"> | <img src="Tracker/Resources/Screenshots/scheduleSelection.png" width="230"> |
+
+| Главный экран | Редактирование трекера | Фильтры |
+|:-------------:|:----------------------:|:-------:|
+| <img src="Tracker/Resources/Screenshots/trackersMain.png" width="230"> | <img src="Tracker/Resources/Screenshots/tracker-editing.png" width="230"> | <img src="Tracker/Resources/Screenshots/filterSelection.png" width="230"> |
+
+| Результат фильтрации | Статистика |
+|:--------------------:|:----------:|
+| <img src="Tracker/Resources/Screenshots/trackersFilters.png" width="230"> | <img src="Tracker/Resources/Screenshots/statistics.png" width="230"> |
+
 ## Ссылки
 [Дизайн Figma](https://www.figma.com/design/owAO4CAPTJdpM1BZU5JHv7/Tracker)
 
