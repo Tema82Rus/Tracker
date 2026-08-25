@@ -24,7 +24,7 @@ https://github.com/user-attachments/assets/9a57d4dc-16d1-43df-8744-a519d5c051ef
 
 | Результат фильтрации | Закрепленные | Статистика |
 |:--------------------:|:------------:| :---------:|
-| <img src="Tracker/Resources/Screenshots/trackersFilters.png" width="230"> | <img src="Tracker/Resources/Screenshots/pinState.png" width="230"> | <img src="Tracker/Resources/Screenshots/statistics.png" width="230">
+| <img src="Tracker/Resources/Screenshots/trackersFiltersState.png" width="230"> | <img src="Tracker/Resources/Screenshots/pinState.png" width="230"> | <img src="Tracker/Resources/Screenshots/statistics.png" width="230">
 
 ## Ссылки
 [Дизайн Figma](https://www.figma.com/design/owAO4CAPTJdpM1BZU5JHv7/Tracker)
