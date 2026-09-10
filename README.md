@@ -26,11 +26,6 @@ https://github.com/user-attachments/assets/9a57d4dc-16d1-43df-8744-a519d5c051ef
 |:--------------------:|:------------:| :---------:|
 | <img src="Tracker/Resources/Screenshots/trackersFiltersState.png" width="230"> | <img src="Tracker/Resources/Screenshots/pinState.png" width="230"> | <img src="Tracker/Resources/Screenshots/statistics.png" width="230">
 
-## Ссылки
-[Дизайн Figma](https://www.figma.com/design/owAO4CAPTJdpM1BZU5JHv7/Tracker)
-
-[ТЗ приложения](https://github.com/Yandex-Practicum/iOS-TrackerApp-Public)
-
 ## Основной функционал:
 * Онбординг при первом запуске приложения.
 * Создание трекера с названием, категорией и расписанием по дням недели.
